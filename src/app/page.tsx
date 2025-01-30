@@ -5,8 +5,12 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function Home() {
-  // Array of available images
-  const images = ['/joey.jpeg', '/pixel_joey.jpeg'];
+  const isGitHubPages = process.env.DEPLOY_TARGET === 'github-pages';
+  // Array of available images with conditional basePath
+  const images = [
+    `${isGitHubPages ? '/joeyqliu' : ''}/joey.jpeg`,
+    `${isGitHubPages ? '/joeyqliu' : ''}/pixel_joey.jpeg`
+  ];
   // State to track current image
   const [currentImage, setCurrentImage] = useState(images[0]);
   const [isTransitioning, setIsTransitioning] = useState(false);
