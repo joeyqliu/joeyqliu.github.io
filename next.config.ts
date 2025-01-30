@@ -1,11 +1,8 @@
 import type { NextConfig } from "next";
-
 const nextConfig: NextConfig = {
-  output: 'export',
-  basePath: '/joeyqliu',
   images: {
     unoptimized: true,
   },
+  output: 'export'
 };
-
 export default nextConfig;

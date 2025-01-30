@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Home() {
@@ -33,10 +34,15 @@ export default function Home() {
       {/* Header with name and about */}
       <header className="w-full px-6 py-8">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">JOEY LIU</h1>
-          <a href="/" className="text-lg font-[family-name:var(--font-geist-mono)]">
+          <Link href="/" className="text-2xl font-bold z-50">
+            JOEY LIU
+          </Link>
+          <Link 
+            href="/about" 
+            className="text-lg font-[family-name:var(--font-geist-mono)] hover:text-white transition-colors duration-150 cursor-pointer p-2 z-50"
+          >
             about
-          </a>
+          </Link>
         </div>
       </header>
 
@@ -73,12 +79,12 @@ export default function Home() {
         <div className="max-w-2xl mx-auto px-6">
           <div className="flex flex-col items-center gap-4">
             <div className="flex justify-center items-center gap-6 font-[family-name:var(--font-geist-mono)] text-sm">
-              <a href="https://github.com/joeyqliu">GitHub</a>
-              <a href="https://linkedin.com/in/joeyqliu">LinkedIn</a>
-              <a href="mailto:joeyqliu@gmail.com">Email</a>
+              <Link href="https://github.com/joeyqliu" target="_blank" className="z-50">GitHub</Link>
+              <Link href="https://linkedin.com/in/joeyqliu" target="_blank" className="z-50">LinkedIn</Link>
+              <Link href="mailto:joeyqliu@gmail.com" className="z-50">Email</Link>
             </div>
             <span className="font-[family-name:var(--font-geist-mono)] text-sm">
-              &lt;=&gt;
+              &lt; = &gt;
             </span>
           </div>
         </div>
