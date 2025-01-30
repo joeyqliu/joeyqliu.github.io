@@ -66,11 +66,11 @@ export default function Home() {
                 priority
               />
             </div>
-            👋 Hello, I'm Joey
+            👋 Hello, I&apos;m Joey
           </span>.
         </h2>
         <p className="text-lg text-center max-w-xl text-gray-700">
-          I'm a software engineer based in the bay area.
+          I&apos;m a software engineer based in the bay area.
         </p>
       </main>
 
