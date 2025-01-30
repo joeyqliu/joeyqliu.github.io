@@ -16,7 +16,8 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci
-      - run: npm run build
+      - run: DEPLOY_TARGET=github-pages npm run build
+      - run: touch out/.nojekyll
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
