@@ -2,16 +2,24 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
-  const isGitHubPages = process.env.DEPLOY_TARGET === 'github-pages';
-  // Array of available images with conditional basePath
+  // Get the basePath from window location
+  const [basePath, setBasePath] = useState('');
+  
+  useEffect(() => {
+    // Check if we're on GitHub Pages by looking at the pathname
+    const isGitHubPages = window.location.pathname.startsWith('/joeyqliu');
+    setBasePath(isGitHubPages ? '/joeyqliu' : '');
+  }, []);
+
+  // Array of available images with dynamic basePath
   const images = [
-    `${isGitHubPages ? '/joeyqliu' : ''}/joey.jpeg`,
-    `${isGitHubPages ? '/joeyqliu' : ''}/pixel_joey.jpeg`
+    `${basePath}/joey.jpeg`,
+    `${basePath}/pixel_joey.jpeg`
   ];
-  // State to track current image
+  
   const [currentImage, setCurrentImage] = useState(images[0]);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
