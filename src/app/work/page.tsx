@@ -1,13 +1,13 @@
 "use client";
 
-// import Link from "next/link";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-export default function About() {
+export default function Work() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header currentPage="about" />
+      <Header currentPage="work" />
       
       <main className="flex-grow flex flex-col items-center justify-center px-4 sm:px-6 -mt-20 sm:-mt-40">
         <div className="flex flex-col items-center">

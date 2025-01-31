@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --background: #F5E6D3;  /* soft beige */
-  --foreground: #2C2C2C;  /* slightly softer black for better contrast */
+  --background: #F8F1E9;  /* softer beige */
+  --foreground: #2C2C2C;  /* keeping the same text color */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #F5E6D3;  /* keeping beige for dark mode too */
+    --background: #F8F1E9;  /* keeping same color for dark mode */
     --foreground: #2C2C2C;
   }
 }

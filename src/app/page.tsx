@@ -3,10 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   // Get the basePath from window location
   const [basePath, setBasePath] = useState('');
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   
   useEffect(() => {
     // Check if we're on GitHub Pages by looking at the pathname
@@ -17,12 +21,11 @@ export default function Home() {
   // Array of available images with dynamic basePath
   const images = [
     `${basePath}/joey.jpeg`,
-    `${basePath}/pixel_joey.jpeg`
+    `${basePath}/pixel_joey.jpeg`,
+    `${basePath}/canyon_joey.jpeg`
   ];
   
   const [currentImage, setCurrentImage] = useState(images[0]);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   // Function to select random image
   const selectRandomImage = () => {
@@ -43,20 +46,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header with name and about */}
-      <header className="w-full px-4 sm:px-6 py-6 sm:py-8">
-        <div className="flex justify-between items-center">
-          <Link href="/" className="text-xl sm:text-2xl font-bold z-50">
-            JOEY LIU
-          </Link>
-          <Link 
-            href="/about" 
-            className="text-base sm:text-lg font-[family-name:var(--font-geist-mono)] hover:text-white transition-colors duration-150 cursor-pointer p-2 z-50"
-          >
-            about
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       <main className="flex-grow flex flex-col items-center justify-center px-4 sm:px-6 -mt-20 sm:-mt-40">
         <h2 className="text-3xl sm:text-5xl font-bold text-center max-w-2xl mb-4 sm:mb-6">
@@ -89,21 +79,11 @@ export default function Home() {
         </p>
       </main>
 
-      {/* Contact Section */}
-      <footer className="w-full py-6 sm:py-8 mt-auto">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col items-center gap-3 sm:gap-4">
-            <div className="flex justify-center items-center gap-4 sm:gap-6 font-[family-name:var(--font-geist-mono)] text-xs sm:text-sm">
-              <Link href="https://github.com/joeyqliu" target="_blank" className="z-50">GitHub</Link>
-              <Link href="https://linkedin.com/in/joeyqliu" target="_blank" className="z-50">LinkedIn</Link>
-              <Link href="mailto:joeyqliu@gmail.com" className="z-50">Email</Link>
-            </div>
-            <span className="font-[family-name:var(--font-geist-mono)] text-xs sm:text-sm">
-              &lt; = &gt;
-            </span>
-          </div>
-        </div>
-      </footer>
+      <p className="text-xs sm:text-sm text-center text-gray-500 mb-4">
+        hover over the emoji to say hi!
+      </p>
+
+      <Footer />
     </div>
   );
 }
