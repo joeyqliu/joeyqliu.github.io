@@ -38,7 +38,7 @@ export default function About() {
               <Link href="mailto:joeyqliu@gmail.com" className="z-50">Email</Link>
             </div>
             <span className="font-[family-name:var(--font-geist-mono)] text-xs sm:text-sm">
-              &lt;=&gt;
+              &lt; = &gt;
             </span>
           </div>
         </div>

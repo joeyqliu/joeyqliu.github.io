@@ -68,17 +68,18 @@ export default function Home() {
             onTouchEnd={handleMouseLeave}
           >
             <div className="absolute -top-48 sm:-top-64 left-1/2 -translate-x-1/2 z-10">
-              <Image
-                src={currentImage}
-                alt="Joey Liu"
-                width={200}
-                height={200}
-                className={`w-[180px] h-[180px] sm:w-[250px] sm:h-[250px] rounded-full shadow-lg transition-all duration-500 ease-in-out ${
-                  !isHovered ? 'opacity-0 scale-95 invisible' : 
-                  isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-                }`}
-                priority
-              />
+              <div className="w-[180px] h-[180px] sm:w-[250px] sm:h-[250px] relative overflow-hidden rounded-full">
+                <Image
+                  src={currentImage}
+                  alt="Joey Liu"
+                  fill
+                  className={`object-cover transition-all duration-500 ease-in-out ${
+                    !isHovered ? 'opacity-0 scale-95 invisible' : 
+                    isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100 shadow-lg'
+                  }`}
+                  priority
+                />
+              </div>
             </div>
             👋 Hello, I&apos;m Joey
           </span>.
@@ -98,7 +99,7 @@ export default function Home() {
               <Link href="mailto:joeyqliu@gmail.com" className="z-50">Email</Link>
             </div>
             <span className="font-[family-name:var(--font-geist-mono)] text-xs sm:text-sm">
-              &lt;=&gt;
+              &lt; = &gt;
             </span>
           </div>
         </div>
