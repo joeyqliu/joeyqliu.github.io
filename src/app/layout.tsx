@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Joey Liu",
   description: "Joey Liu's personal website",
+  icons: {
+    icon: '/pixel_joey.jpeg',
+  },
 };
 
 export default function RootLayout({
