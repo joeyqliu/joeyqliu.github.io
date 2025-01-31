@@ -44,34 +44,36 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header with name and about */}
-      <header className="w-full px-6 py-8">
+      <header className="w-full px-4 sm:px-6 py-6 sm:py-8">
         <div className="flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold z-50">
+          <Link href="/" className="text-xl sm:text-2xl font-bold z-50">
             JOEY LIU
           </Link>
           <Link 
             href="/about" 
-            className="text-lg font-[family-name:var(--font-geist-mono)] hover:text-white transition-colors duration-150 cursor-pointer p-2 z-50"
+            className="text-base sm:text-lg font-[family-name:var(--font-geist-mono)] hover:text-white transition-colors duration-150 cursor-pointer p-2 z-50"
           >
             about
           </Link>
         </div>
       </header>
 
-      <main className="flex-grow flex flex-col items-center justify-center px-6 -mt-40">
-        <h2 className="text-5xl font-bold text-center max-w-2xl mb-6">
+      <main className="flex-grow flex flex-col items-center justify-center px-4 sm:px-6 -mt-20 sm:-mt-40">
+        <h2 className="text-3xl sm:text-5xl font-bold text-center max-w-2xl mb-4 sm:mb-6">
           <span 
             className="relative inline-block group"
             onMouseEnter={selectRandomImage}
+            onTouchStart={selectRandomImage}
             onMouseLeave={handleMouseLeave}
+            onTouchEnd={handleMouseLeave}
           >
-            <div className="absolute -top-64 left-1/2 -translate-x-1/2 z-10">
+            <div className="absolute -top-48 sm:-top-64 left-1/2 -translate-x-1/2 z-10">
               <Image
                 src={currentImage}
                 alt="Joey Liu"
-                width={250}
-                height={250}
-                className={`rounded-full shadow-lg transition-all duration-500 ease-in-out ${
+                width={200}
+                height={200}
+                className={`w-[180px] h-[180px] sm:w-[250px] sm:h-[250px] rounded-full shadow-lg transition-all duration-500 ease-in-out ${
                   !isHovered ? 'opacity-0 scale-95 invisible' : 
                   isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
                 }`}
@@ -81,22 +83,22 @@ export default function Home() {
             👋 Hello, I&apos;m Joey
           </span>.
         </h2>
-        <p className="text-lg text-center max-w-xl text-gray-700">
+        <p className="text-base sm:text-lg text-center max-w-xl text-gray-700 px-4">
           I&apos;m a software engineer based in the bay area.
         </p>
       </main>
 
       {/* Contact Section */}
-      <footer className="w-full py-8 mt-auto">
-        <div className="max-w-2xl mx-auto px-6">
-          <div className="flex flex-col items-center gap-4">
-            <div className="flex justify-center items-center gap-6 font-[family-name:var(--font-geist-mono)] text-sm">
+      <footer className="w-full py-6 sm:py-8 mt-auto">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col items-center gap-3 sm:gap-4">
+            <div className="flex justify-center items-center gap-4 sm:gap-6 font-[family-name:var(--font-geist-mono)] text-xs sm:text-sm">
               <Link href="https://github.com/joeyqliu" target="_blank" className="z-50">GitHub</Link>
               <Link href="https://linkedin.com/in/joeyqliu" target="_blank" className="z-50">LinkedIn</Link>
               <Link href="mailto:joeyqliu@gmail.com" className="z-50">Email</Link>
             </div>
-            <span className="font-[family-name:var(--font-geist-mono)] text-sm">
-              &lt; = &gt;
+            <span className="font-[family-name:var(--font-geist-mono)] text-xs sm:text-sm">
+              &lt;=&gt;
             </span>
           </div>
         </div>
