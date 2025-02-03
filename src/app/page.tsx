@@ -7,22 +7,14 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function Home() {
-  // Get the basePath from window location
-  const [basePath, setBasePath] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   
-  useEffect(() => {
-    // Check if we're on GitHub Pages by looking at the pathname
-    const isGitHubPages = window.location.pathname.startsWith('/joeyqliu');
-    setBasePath(isGitHubPages ? '/joeyqliu' : '');
-  }, []);
-
-  // Array of available images with dynamic basePath
+  // Array of available images
   const images = [
-    `${basePath}/joey.jpeg`,
-    `${basePath}/pixel_joey.jpeg`,
-    `${basePath}/canyon_joey.jpeg`
+    './joey.jpeg',
+    './pixel_joey.jpeg',
+    './canyon_joey.jpeg'
   ];
   
   const [currentImage, setCurrentImage] = useState(images[0]);
