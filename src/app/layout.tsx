@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "Joey Liu",
   description: "joey's personal website",
   icons: {
-    icon: './favicon.ico',
+    icon: '/favicon.ico',
   },
 };
 
