@@ -7,17 +7,22 @@ interface HeaderProps {
 }
 
 export default function Header({ currentPage }: HeaderProps) {
+  // Use a dynamic hover text color based on the current page: on the about page, use #808000 on hover.
+  const hoverColorClass = currentPage === 'about' ? 'hover:text-[#808000]' : 'hover:text-white';
+
   return (
     <header className="w-full px-4 sm:px-6 py-6 sm:py-8">
       <div className="flex justify-between items-center">
-        <Link href="/" className="text-xl sm:text-2xl font-bold z-50">
+        <Link 
+          href="/" 
+          className={`text-xl sm:text-2xl font-bold z-50 ${hoverColorClass}`}>
           JOEY LIU
         </Link>
         <div className="flex gap-4">
           <div className="relative">
             <Link 
               href="/work" 
-              className={`text-base sm:text-lg font-[family-name:var(--font-geist-mono)] hover:text-white transition-colors duration-150 cursor-pointer p-2 z-50 ${
+              className={`text-base sm:text-lg font-[family-name:var(--font-geist-mono)] ${hoverColorClass} transition-colors duration-150 cursor-pointer p-2 z-50 ${
                 currentPage === 'work' ? 'pointer-events-none' : ''
               }`}
             >
@@ -30,7 +35,7 @@ export default function Header({ currentPage }: HeaderProps) {
           <div className="relative">
             <Link 
               href="/about" 
-              className={`text-base sm:text-lg font-[family-name:var(--font-geist-mono)] hover:text-white transition-colors duration-150 cursor-pointer p-2 z-50 ${
+              className={`text-base sm:text-lg font-[family-name:var(--font-geist-mono)] ${hoverColorClass} transition-colors duration-150 cursor-pointer p-2 z-50 ${
                 currentPage === 'about' ? 'pointer-events-none' : ''
               }`}
             >
@@ -43,7 +48,7 @@ export default function Header({ currentPage }: HeaderProps) {
           <div className="relative">
             <Link 
               href="/blog" 
-              className={`text-base sm:text-lg font-[family-name:var(--font-geist-mono)] hover:text-white transition-colors duration-150 cursor-pointer p-2 z-50 ${
+              className={`text-base sm:text-lg font-[family-name:var(--font-geist-mono)] ${hoverColorClass} transition-colors duration-150 cursor-pointer p-2 z-50 ${
                 currentPage === 'blog' ? 'pointer-events-none' : ''
               }`}
             >
@@ -56,5 +61,5 @@ export default function Header({ currentPage }: HeaderProps) {
         </div>
       </div>
     </header>
-  )
+  );
 } 
