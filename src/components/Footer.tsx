@@ -10,7 +10,7 @@ interface FooterProps {
 export default function Footer({ currentPage }: FooterProps) {
   // Set the default text color based on the page:
   // On the about page, the color is [#808000]; otherwise, it's white.
-  const textColorClass = currentPage === 'about' ? 'text-[#808000]' : 'text-white';
+  const textColorClass = currentPage === 'about' ? 'text-[#808000]' : 'text-black';
 
   return (
     <footer className="w-full py-6 sm:py-8 mt-auto">
