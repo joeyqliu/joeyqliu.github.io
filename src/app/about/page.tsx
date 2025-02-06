@@ -3,7 +3,7 @@
 // import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-
+import Image from "next/image";
 export default function About() {
   // Function to calculate years since 2019
   const calculateExperienceYears = () => {
@@ -26,20 +26,22 @@ export default function About() {
                   thanks for stopping by
                 </h1>
                 <p className="text-base sm:text-lg text-left text-700 mb-6">
-                  my name is joey. i'm a software engineer with a focus on cloud infrastructure. i'm currently at handshake, helping the next generation find their first, second, and third jobs.
+                  my name is joey. i&apos;m a software engineer with a focus on cloud infrastructure. i&apos;m currently at handshake, helping the next generation find their first, second, and third jobs.
                   <br />
                   <br />
-                  i'm passionate about building community and creating products that bring people together.
+                  i&apos;m passionate about building community and creating products that bring people together.
                   <br />
                 </p>
               </div>
             </div>
             {/* Profile picture now aligned to the right with allocated width */}
             <div className="w-full sm:w-1/3 mt-4 sm:mt-0 sm:ml-6 flex items-center justify-end">
-              <img
+              <Image
                 src="/canyon_joey.jpeg" // Do not change this
                 alt="Profile Picture"
                 className="w-[98%] aspect-square border-2 border-[#808000] object-cover rounded-lg"
+                width={1000}
+                height={1000}
               />
             </div>
           </div>
