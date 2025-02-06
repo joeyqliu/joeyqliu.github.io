@@ -61,7 +61,7 @@ export default function About() {
               </div>
               <div className="py-4">
                 <h2 className="text-xl font-semibold mb-2 text-[#806400]">fun fact</h2>
-                <p className="text-black-600">auditioned for russel from up, didn't get the part</p>
+                <p className="text-black-600">auditioned for russel from up, didn&apos;t get the part</p>
               </div>
               <hr className="border-t border-black col-span-3 my-4" />
               <div className="py-4 border-r border-black">
