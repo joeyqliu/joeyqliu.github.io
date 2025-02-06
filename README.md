@@ -5,4 +5,5 @@ i'm passionate about building community and creating products that bring people 
 
 thanks for checking out my website, feel free to reach out if you have any questions. 
 
-- joey
+best,
+joey
