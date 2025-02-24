@@ -46,3 +46,6 @@ export default function Footer({ currentPage }: FooterProps) {
     </footer>
   );
 } 
+
+
+fnhklajfeklajfelka
