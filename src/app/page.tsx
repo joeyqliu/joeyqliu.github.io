@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-// import Link from "next/link";
-import { useState} from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -18,6 +18,32 @@ export default function Home() {
   ];
   
   const [currentImage, setCurrentImage] = useState(images[0]);
+
+  // Rotating occupations
+  const occupationOptions = [
+    'software engineer',
+    'college mentor',
+    'compost enthusiast',
+    'pourover maker',
+    'warriors fan'
+  ];
+  const [currentOccupationIndex, setCurrentOccupationIndex] = useState(0);
+  const [isOccupationFading, setIsOccupationFading] = useState(false);
+  const currentOccupation = occupationOptions[currentOccupationIndex];
+  useEffect(() => {
+    let timeoutId: number | undefined;
+    const intervalId = window.setInterval(() => {
+      setIsOccupationFading(true);
+      timeoutId = window.setTimeout(() => {
+        setCurrentOccupationIndex((previousIndex) => (previousIndex + 1) % occupationOptions.length);
+        setIsOccupationFading(false);
+      }, 300);
+    }, 3000);
+    return () => {
+      window.clearInterval(intervalId);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, []);
 
   // Function to select random image
   const selectRandomImage = () => {
@@ -63,12 +89,36 @@ export default function Home() {
                 />
               </div>
             </div>
-            👋 Hello, I&apos;m Joey
+            <span className="wave-emoji" aria-hidden="true">👋</span> hey, i&apos;m Joey
           </span>.
         </h2>
-        <p className="text-base sm:text-lg text-center max-w-xl text-gray-700 px-4">
-          I&apos;m a software engineer based in the bay area.
-        </p>
+        <div className="text-base sm:text-lg text-center max-w-xl text-gray-700 px-4">
+          <p>i&apos;m a</p>
+          <p>
+            {currentOccupation === 'software engineer' ? (
+              <Link
+                href="/work"
+                className={`inline-block w-[20ch] text-center transition-transform duration-200 ease-out`}
+                aria-label="View my work experience"
+              >
+                <span
+                  aria-live="polite"
+                  className={`font-semibold block transition-opacity duration-300 ease-in-out text-amber-400 ${isOccupationFading ? 'opacity-0' : 'opacity-100'} hover:scale-105 active:scale-110`}
+                >
+                  {currentOccupation}
+                </span>
+              </Link>
+            ) : (
+              <span
+                aria-live="polite"
+                className={`font-semibold inline-block w-[20ch] text-center transition-opacity duration-300 ease-in-out text-amber-400 ${isOccupationFading ? 'opacity-0' : 'opacity-100'}`}
+              >
+                {currentOccupation}
+              </span>
+            )}
+          </p>
+          <p>based in the bay area.</p>
+        </div>
       </main>
 
       <p className="text-xs sm:text-sm text-center text-gray-500 mb-4">
