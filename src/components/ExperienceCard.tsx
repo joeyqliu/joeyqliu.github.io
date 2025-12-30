@@ -2,6 +2,11 @@
 
 import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 
+interface PersonToThank {
+  name: string;
+  url: string;
+}
+
 interface ExperienceCardProps {
   id: string;
   companyName: string;
@@ -9,6 +14,7 @@ interface ExperienceCardProps {
   about: string;
   imageSrc?: string;
   imageContain?: boolean;
+  peopleToThank?: PersonToThank[];
   isActive: boolean;
   onIntersectionChange?: (id: string, ratio: number) => void;
 }
@@ -26,6 +32,7 @@ const ExperienceCard = forwardRef<ExperienceCardRef, ExperienceCardProps>(
       about,
       imageSrc,
       imageContain,
+      peopleToThank,
       isActive,
       onIntersectionChange,
     },
@@ -126,10 +133,32 @@ const ExperienceCard = forwardRef<ExperienceCardRef, ExperienceCardProps>(
               <h4 className="text-xs font-semibold text-[#2C2C2C]/80 mb-2 uppercase tracking-wide">
                 About
               </h4>
-              <p className="text-sm sm:text-base text-[#2C2C2C]/80 leading-relaxed">
+              <p className="text-sm sm:text-base text-[#2C2C2C]/80 leading-relaxed whitespace-pre-line">
                 {about || "Details coming soon..."}
               </p>
             </div>
+            
+            {peopleToThank && peopleToThank.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-[#2C2C2C]/10">
+                <h4 className="text-xs font-semibold text-[#2C2C2C]/80 mb-2 uppercase tracking-wide">
+                  People to thank
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {peopleToThank.map((person, index) => (
+                    <a
+                      key={index}
+                      href={person.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-sm text-[#2C2C2C]/70 hover:text-[#2C2C2C] underline underline-offset-2 transition-colors"
+                    >
+                      {person.name}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
