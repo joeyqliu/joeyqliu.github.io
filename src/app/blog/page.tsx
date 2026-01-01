@@ -1,23 +1,28 @@
-"use client";
-
-// import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { getAllPosts } from "@/lib/blog";
+import BlogList from "@/components/BlogList";
 
 export default function Blog() {
+  const posts = getAllPosts();
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header currentPage="blog" />
-      
-      <main className="flex-grow flex flex-col items-center justify-center px-4 sm:px-6 -mt-20 sm:-mt-40">
-        <div className="flex flex-col items-center">
-          <h1 className="text-3xl sm:text-5xl font-bold text-center mb-4 sm:mb-6">
-            Coming soon...
-          </h1>
+
+      <main className="flex-grow px-4 sm:px-6 py-8 sm:py-12">
+        <div className="max-w-3xl mx-auto">
+          {posts.length === 0 ? (
+            <p className="text-gray-600 text-center py-12">
+              No posts yet. Check back soon!
+            </p>
+          ) : (
+            <BlogList posts={posts} />
+          )}
         </div>
       </main>
 
       <Footer />
     </div>
   );
-} 
+}

@@ -23,9 +23,7 @@ export default function Home() {
   const occupationOptions = [
     'software engineer',
     'college mentor',
-    'compost enthusiast',
-    'pourover maker',
-    'warriors fan'
+    'pourover guy'
   ];
   const [currentOccupationIndex, setCurrentOccupationIndex] = useState(0);
   const [isOccupationFading, setIsOccupationFading] = useState(false);

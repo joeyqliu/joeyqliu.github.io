@@ -7,8 +7,7 @@ interface HeaderProps {
 }
 
 export default function Header({ currentPage }: HeaderProps) {
-  // On the about page, the default text color is #808000; otherwise, it's white.
-  const textColorClass = currentPage === 'about' ? 'text-[#808000]' : 'text-black';
+  const textColorClass = 'text-black';
 
   return (
     <header className="w-full px-4 sm:px-6 py-6 sm:py-8">
