@@ -1,86 +1,127 @@
-"use client";
+import { Fragment, type ReactNode } from "react";
+import Link from "next/link";
+import { type Icon } from "@phosphor-icons/react";
+import {
+  MapPinIcon,
+  HammerIcon,
+  BookOpenIcon,
+  SparkleIcon,
+  LightbulbIcon,
+} from "@phosphor-icons/react/ssr";
+import AboutProfilePhoto from "@/components/AboutProfilePhoto";
+import ThemeToggle from "@/components/ThemeToggle";
 
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import Image from "next/image";
+const inlineLinkClass =
+  "underline underline-offset-4 decoration-[#555555]/40 dark:decoration-[#999999]/40 hover:text-[#111111] dark:hover:text-[#f2f2f2] hover:decoration-[#111111]/60 dark:hover:decoration-[#f2f2f2]/60 transition-colors";
+
+const aboutFacts: { label: string; Icon: Icon; value: ReactNode }[] = [
+  { label: "based in", Icon: MapPinIcon, value: "south bay, ca" },
+  {
+    label: "currently",
+    Icon: HammerIcon,
+    value: (
+      <>
+        building cloud infra @{" "}
+        <Link
+          href="https://joinhandshake.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={inlineLinkClass}
+        >
+          handshake
+        </Link>{" "}
+        and building{" "}
+        <Link
+          href="https://joinflyer.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={inlineLinkClass}
+        >
+          flyer
+        </Link>
+      </>
+    ),
+  },
+  {
+    label: "reading",
+    Icon: BookOpenIcon,
+    value:
+      "how to know a person by david brooks and fear and trembling by søren kierkegaard",
+  },
+  {
+    label: "interests",
+    Icon: SparkleIcon,
+    value: "pick up basketball, pourovers, composting",
+  },
+  {
+    label: "fun fact",
+    Icon: LightbulbIcon,
+    value: (
+      <>
+        i auditioned for russell from{" "}
+        <Link
+          href="https://en.wikipedia.org/wiki/Up_(2009_film)"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={inlineLinkClass}
+        >
+          up
+        </Link>
+        , didn&apos;t get the part
+      </>
+    ),
+  },
+];
 
 export default function About() {
-  const calculateExperienceYears = () => {
-    const currentYear = new Date().getFullYear();
-    return currentYear - 2019;
-  };
-
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header currentPage="about" />
+    <div className="min-h-screen bg-white dark:bg-[#0a0a0a] relative transition-colors">
+      <ThemeToggle />
 
-      <main className="flex-grow py-8 sm:py-12">
-        <div className="max-w-4xl w-full mx-auto px-4 sm:px-6">
-          {/* Header and photo row */}
-          <div className="flex flex-col sm:flex-row items-start gap-6 sm:gap-10 mb-8">
-            <div className="flex-1">
-              <h1 className="text-4xl sm:text-4xl font-bold mb-6">
-                thanks for stopping by
-              </h1>
-              <p className="text-base sm:text-lg text-gray-700">
-                i&apos;m joey, a software engineer with a focus on cloud infrastructure.
-                <br />
-                <br />
-                outside of work, you can find me playing basketball, reading, or building grove [link coming soon]. 
-              </p>
-            </div>
-            <div className="w-full sm:w-64 shrink-0">
-              <Image
-                src="/canyon_joey.jpeg"
-                alt="Profile Picture"
-                className="w-full aspect-square object-cover rounded-lg"
-                width={1000}
-                height={1000}
-              />
-            </div>
-          </div>
+      <div className="min-h-screen flex flex-col px-6 sm:px-14 pt-16 sm:pt-[42px] pb-12 sm:pb-12 gap-6">
+        <Link
+          href="/"
+          className="text-[13px] text-[#555555] dark:text-[#999999] hover:text-[#111111] dark:hover:text-[#f2f2f2] font-[family-name:var(--font-ibm-plex-mono)] w-fit transition-colors"
+        >
+          ← back
+        </Link>
 
-          {/* Facts grid - no borders */}
-          <div className="mt-16">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-              <div>
-                <h2 className="text-xl font-semibold mb-2">location</h2>
-                <p className="text-gray-700">bay area, california</p>
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold mb-2">experience</h2>
-                <p className="text-gray-700">{calculateExperienceYears()} years</p>
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold mb-2">fun fact</h2>
-                <p className="text-gray-700">auditioned for russel from up, didn&apos;t get the part</p>
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold mb-2">reading</h2>
-                <p className="text-gray-700">
-                  the weight of glory<br />
-                  by c.s lewis
-                </p>
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold mb-2">volunteering</h2>
-                <p className="text-gray-700">
-                  mentor @ silicon valley college church
-                </p>
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold mb-2">interests</h2>
-                <p className="text-gray-700">
-                  basketball, coffee, reading,<br />
-                  mentoring the next generation
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
+        <section className="max-w-[920px] w-full flex flex-col gap-8 pt-4 sm:pt-8">
+          <AboutProfilePhoto />
 
-      <Footer currentPage="about" />
+          <h1
+            className="text-3xl sm:text-[40px] text-[#111111] dark:text-[#f2f2f2] font-[family-name:var(--font-geist)] tracking-tight"
+            style={{ fontWeight: 500, lineHeight: 1.05 }}
+          >
+            about
+          </h1>
+
+          {/* Sub-header / blurb rows — add more entries to aboutFacts above */}
+          <dl className="grid grid-cols-[140px_1fr] sm:grid-cols-[170px_1fr] gap-x-6 gap-y-4 font-[family-name:var(--font-geist)]">
+            {aboutFacts.map(({ label, Icon, value }) => (
+              <Fragment key={label}>
+                <dt
+                  className="flex items-center gap-2.5 text-sm sm:text-base text-[#111111] dark:text-[#f2f2f2]"
+                  style={{ fontWeight: 600 }}
+                >
+                  <Icon
+                    weight="duotone"
+                    aria-hidden="true"
+                    className="w-[18px] h-[18px] shrink-0 text-[#555555] dark:text-[#999999]"
+                  />
+                  <span>{label}</span>
+                </dt>
+                <dd
+                  className="text-sm sm:text-base text-[#555555] dark:text-[#999999] self-center"
+                  style={{ fontWeight: 400, lineHeight: 1.45 }}
+                >
+                  {value}
+                </dd>
+              </Fragment>
+            ))}
+          </dl>
+        </section>
+      </div>
     </div>
   );
 }

@@ -1,150 +1,139 @@
-"use client";
-
-import { useRef, useState, useCallback } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import ExperienceCard, { ExperienceCardRef } from "@/components/ExperienceCard";
-import Timeline from "@/components/Timeline";
+import Link from "next/link";
+import { CaretRightIcon, DotIcon } from "@phosphor-icons/react/ssr";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const experiences = [
   {
-    id: "handshake",
-    companyName: "Handshake",
-    dateRange: "May 2023 - Present",
-    about: "Helping define the platform strategy for our entire organization as we scale from scrappy startup to long term business. \n\nThe work ranges from CICD, to K8s clusters, to Infrastructure as Code",
-    peopleToThank: [
-      { name: "Chris Lau", url: "https://www.linkedin.com/in/chrislau06/" },
-      { name: "Jerry Buckner", url: "https://www.linkedin.com/in/jerrybuckner/"},
-      { name: "Alex Keen", url: "https://www.linkedin.com/in/alexander-keen-4112b2181/"},
-      { name: "Chase Clear", url: "https://www.linkedin.com/in/chaseclear/"},
-      { name: "Irena Abramchuk", url: "https://www.linkedin.com/in/irena-abramchuk/"}
+    company: "handshake",
+    role: "software engineer - cloud infrastructure",
+    dates: "may 2023 — present",
+    defaultOpen: true,
+    body: [
+      "led the upgrade and right-sizing of handshake's entire memorystore redis fleet (~65 instances across 5 environments) from redis 4.0/6.x to 7.2 — $280K/year in recurring cost savings, total memory footprint down 61% (982 GB → 381 GB), three years of downstream gem and sidekiq tech debt unblocked, zero production incidents.",
+      "led the migration of handshake's ci build infrastructure — our most developer-critical platform — off aws ec2 and onto gcp / gke as named project lead from kickoff through cutover. pivoted from static ec2 builders to ephemeral agents running in kubernetes pods, the critical unlock that lets ci scale with engineering headcount. android and linux builders all now run on a kubernetes-native platform with full infrastructure-as-code, modern secrets management, and a stronger security posture. ~$240K/year in cost savings.",
+      "diagnosed a year-long silent failure in our nfs-based git cache for ci builds — the refresh cronjob and consumer pods had been mounting mismatched pvcs for months, leaving every build pulling fresh from origin. shipped the minimum-viable fix (aligned pvcs, faster refresh cadence, proper kubernetes fsgroup ownership in place of a hack init container) that captured ~70-80% of the available networking savings for ~1% of the engineering effort. killed my own previously-scoped daemonset rearchitecture in favor of the simpler design, and concurrently retired two orphaned storage volumes (~11 TiB total) found during the audit — ~$39K/year in recurring cost.",
+      "as part of the same ci cost initiative, shipped a one-pr opt-in mechanism that turned on bring-your-own-bucket artifact uploads for every pipeline org-wide — a platform-level switch flipped once and adopted across the entire build fleet, completing the ~$180K/year networking savings program.",
     ],
-    imageSrc: "/Handshake.jpeg",
   },
   {
-    id: "rivian",
-    companyName: "Rivian",
-    dateRange: "March 2021 - May 2023",
-    about: "Experienced platform engineering at scale with a focus on infrastructure as code tooling and container ochestration with EKS. ",
-    peopleToThank: [
-      { name: "Gabor Maghera", url: "https://www.linkedin.com/in/gabormaghera/" },
-      { name: "Vivian Ta", url: "https://www.linkedin.com/in/visokoo"},
-      { name: "Vladyslav Kuziura", url: "https://www.linkedin.com/in/vkuziura"}
+    company: "rivian",
+    role: "software engineer - platform infrastructure",
+    dates: "mar 2021 — may 2023",
+    defaultOpen: false,
+    body: [
+      "owned and hardened the in-house terraform module library — 50+ modules used by 500+ engineers across the company — and maintained the broader infrastructure-as-code stack that the same audience depended on day to day.",
+      "led the migration from script-based helm deployments to a versioned terraform module adopted across 20+ kubernetes clusters, reimplemented a system-critical dns component and rolled it through 8+ eks clusters with zero customer impact, and scripted the move from cluster-autoscaler to karpenter across our eks fleet.",
+      "built drift-detection tooling across 8+ aws accounts to surface unmanaged and orphaned infrastructure, automated documentation and tech-writing pipelines (200+ documents published without manual intervention), and contributed upstream fixes to open policy agent and eks-blueprints.",
+      "served as the embedded platform liaison to multiple ~15-person product teams during their design and build phases, maintained 10+ multi-region clusters, and rotated on-call for all critical platform services. my first high-leverage job — and the one that taught me what platform engineering is actually for.",
     ],
-    imageSrc: "/RIVIAN.jpg",
   },
   {
-    id: "iotium",
-    companyName: "IoTium",
-    dateRange: "October 2019 - February 2021",
-    about: "My first steps into industry. \n\nWorked on infrastructure automation for deployment of our SaaS offering in AWS. Introduced here to the world of cloud infrastructure and automation through Terraform.",
-    peopleToThank: [
-      { name: "Deepika Venkata", url: "https://www.linkedin.com/in/deepika-venkata/"},
-      { name: "Diego Cristancho", url: "https://www.linkedin.com/in/diego-cristancho-0b42201b/"},
-      { name: "Sandeep Machiraju", url: "https://www.linkedin.com/in/sandeepmachiraju"},
-      { name: "Bullappa Kannakatti", url: "https://www.linkedin.com/in/bullappa-kannakatti-24905b5/"},
-      { name: "Srivatsan Rajagopal", url: "https://www.linkedin.com/in/srivatsan-rajagopal-72371b3/"}
+    company: "iotium",
+    role: "software engineer",
+    dates: "oct 2019 — feb 2021",
+    defaultOpen: false,
+    body: [
+      "worked on iotium's ot access platform: wrote the python + ansible framework that deployed microservices across dev/staging/prod, automated aws infrastructure with terraform, designed custom aws rbac for internal teams, and ran jenkins for continuous releases.",
+      "some wins: release-to-prod time down to 30 minutes, ~10-minute downtime cap via a database rollback feature, bulk device onboarding via yaml in the cli, and 20%+ less ops workload from internal tooling. also took on-call rotation and acted as the cross-time-zone bridge between support, solutions, and our india engineering team.",
     ],
-    imageSrc: "/IOTIUM.jpg",
   },
   {
-    id: "ucsc",
-    companyName: "UCSC Genomics Institute",
-    dateRange: "September 2018 - June 2019",
-    about: "Coiling cables and organizing server rooms for UCSC. Dove into occassional python programming when needed.",
-    peopleToThank: [
-      { name: "Jorge Garcia", url: "https://www.linkedin.com/in/jorge-garcia-99a0a41"},
-      { name: "Erich Weiler", url: "https://www.linkedin.com/in/erich-weiler-2562b323"}
+    company: "ucsc genomics institute",
+    role: "junior system admin",
+    dates: "jan 2018 — jul 2019",
+    defaultOpen: false,
+    body: [
+      "officially: linux admin work across 30+ file systems — OS installs, network configs, openstack components, and a python script (my first) to automate a tedious file-transfer process with unix syscalls.",
+      "unofficially: a lot of standing around in the server room mostly untangling ethernet cables.",
     ],
-    imageSrc: "/BASKIN.jpg",
   },
-];
-
-const pastTimelineItems = [
-  { id: "rivian", label: "Rivian" },
-  { id: "iotium", label: "IoTium" },
-  { id: "ucsc", label: "UCSC Genomics" },
+  {
+    company: "ucsc residential networking",
+    role: "network technician",
+    dates: "sep 2016 — dec 2018",
+    defaultOpen: false,
+    body: [
+      "two years of patching up student laptops across windows, mac, and linux, evicting malware, and convincing 150+ dorm routers to acknowledge the campus network.",
+      "closed 1000+ servicenow tickets along the way — turns out 'have you tried turning it off and on again' really does work most of the time.",
+    ],
+  },
 ];
 
 export default function Work() {
-  const cardRefs = useRef<Map<string, ExperienceCardRef>>(new Map());
-  const [intersectionRatios, setIntersectionRatios] = useState<Map<string, number>>(new Map());
-
-  // Find the card with the highest intersection ratio
-  const activeCardId = useCallback(() => {
-    let maxRatio = 0;
-    let activeId: string | null = null;
-    
-    intersectionRatios.forEach((ratio, id) => {
-      if (ratio > maxRatio && ratio > 0.3) {
-        maxRatio = ratio;
-        activeId = id;
-      }
-    });
-    
-    return activeId;
-  }, [intersectionRatios])();
-
-  const handleIntersectionChange = useCallback((id: string, ratio: number) => {
-    setIntersectionRatios((prev) => {
-      const next = new Map(prev);
-      next.set(id, ratio);
-      return next;
-    });
-  }, []);
-
-  const handleScrollToCard = useCallback((id: string) => {
-    cardRefs.current.get(id)?.scrollToCard();
-  }, []);
-
-  const setCardRef = useCallback((id: string, ref: ExperienceCardRef | null) => {
-    if (ref) {
-      cardRefs.current.set(id, ref);
-    } else {
-      cardRefs.current.delete(id);
-    }
-  }, []);
-
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header currentPage="work" />
+    <div className="min-h-screen bg-white dark:bg-[#0a0a0a] relative transition-colors">
+      <ThemeToggle />
 
-      <Timeline
-        pastItems={pastTimelineItems}
-        activeCardId={activeCardId}
-        onScrollToCard={handleScrollToCard}
-      />
+      <div className="min-h-screen flex flex-col px-6 sm:px-14 pt-16 sm:pt-[42px] pb-12 sm:pb-12 gap-6">
+        <Link
+          href="/"
+          className="text-[13px] text-[#555555] dark:text-[#999999] hover:text-[#111111] dark:hover:text-[#f2f2f2] font-[family-name:var(--font-ibm-plex-mono)] w-fit transition-colors"
+        >
+          ← back
+        </Link>
 
-      <main className="flex-grow">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          {/* Title section - positioned so first card starts at center */}
-          <div className="h-[calc(50vh-120px)] flex items-end justify-center pb-8">
-            <h1 className="text-6xl sm:text-8xl font-bold text-center tracking-wide">
-              EXPERIENCE
-            </h1>
-          </div>
+        <section className="max-w-[760px] w-full flex flex-col gap-10 pt-4 sm:pt-8">
+          <h1
+            className="text-3xl sm:text-[40px] text-[#111111] dark:text-[#f2f2f2] font-[family-name:var(--font-geist)] tracking-tight"
+            style={{ fontWeight: 500, lineHeight: 1.05 }}
+          >
+            work
+          </h1>
 
-          {/* Cards container - pb calculated to center last card (50vh - half of 35vh card) */}
-          <div className="flex flex-col gap-8 pb-[32vh]">
-            {experiences.map((exp) => (
-              <ExperienceCard
-                key={exp.id}
-                ref={(ref) => setCardRef(exp.id, ref)}
-                id={exp.id}
-                companyName={exp.companyName}
-                dateRange={exp.dateRange}
-                about={exp.about}
-                imageSrc={exp.imageSrc}
-                peopleToThank={exp.peopleToThank}
-                isActive={activeCardId === exp.id}
-                onIntersectionChange={handleIntersectionChange}
-              />
+          {/* Each entry is a collapsible <details> — edit `experiences` array above; toggle `defaultOpen` to change initial state */}
+          <div className="flex flex-col">
+            {experiences.map(({ company, role, dates, defaultOpen, body }) => (
+              <details
+                key={company}
+                open={defaultOpen}
+                className="group py-8 first:pt-0 border-b border-[#111111]/10 dark:border-[#f2f2f2]/10 last:border-b-0"
+              >
+                <summary className="list-none [&::-webkit-details-marker]:hidden flex flex-col gap-1">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <div className="flex items-center gap-2">
+                      <CaretRightIcon
+                        weight="duotone"
+                        aria-hidden="true"
+                        className="w-4 h-4 text-[#555555] dark:text-[#999999] transition-transform duration-200 group-open:rotate-90 shrink-0"
+                      />
+                      <h2
+                        className="text-2xl sm:text-[28px] text-[#111111] dark:text-[#f2f2f2] font-[family-name:var(--font-geist)]"
+                        style={{ fontWeight: 500, lineHeight: 1.1 }}
+                      >
+                        {company}
+                      </h2>
+                    </div>
+                    <p className="text-[13px] text-[#555555] dark:text-[#999999] font-[family-name:var(--font-ibm-plex-mono)]">
+                      {dates}
+                    </p>
+                  </div>
+                  <p className="text-[13px] text-[#555555] dark:text-[#999999] font-[family-name:var(--font-ibm-plex-mono)] ml-6">
+                    {role}
+                  </p>
+                </summary>
+
+                <div className="flex flex-col gap-4 mt-4 ml-6">
+                  {body.map((paragraph, i) => (
+                    <div key={i} className="flex gap-2">
+                      <DotIcon
+                        weight="duotone"
+                        aria-hidden="true"
+                        className="w-5 h-5 mt-0.5 shrink-0 text-[#555555]/70 dark:text-[#999999]/70"
+                      />
+                      <p
+                        className="flex-1 text-base sm:text-lg text-[#111111] dark:text-[#f2f2f2] font-[family-name:var(--font-geist)]"
+                        style={{ lineHeight: 1.5 }}
+                      >
+                        {paragraph}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </details>
             ))}
           </div>
-        </div>
-      </main>
-
-      <Footer />
+        </section>
+      </div>
     </div>
   );
 }

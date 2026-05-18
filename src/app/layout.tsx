@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Montserrat, Geist_Mono } from "next/font/google";
+import { Geist, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  variable: '--font-montserrat',
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
 });
 
-const geistMono = Geist_Mono({
+const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-geist-mono",
+  weight: ["400", "500"],
+  variable: "--font-ibm-plex-mono",
 });
 
 export const metadata: Metadata = {
@@ -20,16 +21,19 @@ export const metadata: Metadata = {
   },
 };
 
+const themeInitScript = `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${montserrat.variable} ${geistMono.variable} antialiased`}
+        className={`${geist.variable} ${ibmPlexMono.variable} antialiased`}
       >
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         {children}
       </body>
     </html>
