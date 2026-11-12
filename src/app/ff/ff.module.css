@@ -1,0 +1,138 @@
+.boardBg {
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(255, 211, 77, 0.25), transparent 55%),
+    radial-gradient(circle at 50% 40%, #12307a 0%, #071640 60%, #030a20 100%);
+  color: #fff;
+}
+
+.logo {
+  font-family: Impact, "Arial Black", var(--font-geist), sans-serif;
+  letter-spacing: 0.04em;
+  background: linear-gradient(180deg, #fff6c9 0%, #ffd34d 45%, #e29b00 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 6px 0 #7a3d00) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.6));
+}
+
+.goldBox {
+  background: linear-gradient(180deg, #ffe58a, #f2b705);
+  color: #1b1200;
+  box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.tile {
+  perspective: 1200px;
+}
+.tileInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.tileInner.flipped {
+  transform: rotateX(180deg);
+}
+.face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  border: 3px solid #8fb3ff;
+  box-shadow: inset 0 0 0 3px #061236, 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+.front {
+  background: linear-gradient(180deg, #2459d6, #12339a);
+  justify-content: center;
+}
+.back {
+  background: linear-gradient(180deg, #2e6bff, #1a44c4);
+  transform: rotateX(180deg);
+  justify-content: space-between;
+}
+.numOval {
+  background: radial-gradient(circle at 50% 35%, #3f7bff, #0b2a8a);
+  border: 3px solid #ffd34d;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.emptyTile {
+  border-radius: 14px;
+  background: linear-gradient(180deg, #0c2466, #081a4d);
+  border: 3px solid #284a9e;
+}
+
+.strikeOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3vw;
+  pointer-events: none;
+  animation: strikeFade 1.4s ease-out both;
+}
+.strikeX {
+  width: min(28vw, 46vh);
+  height: min(28vw, 46vh);
+  filter: drop-shadow(0 0 30px rgba(255, 0, 0, 0.7)) drop-shadow(0 10px 20px rgba(0, 0, 0, 0.6));
+  animation: strikePop 0.35s cubic-bezier(0.2, 1.8, 0.4, 1) both;
+}
+@keyframes strikePop {
+  from { transform: scale(2.4); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+@keyframes strikeFade {
+  0%, 75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.awardPop {
+  animation: awardPop 1.6s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+@keyframes awardPop {
+  0% { transform: translateY(20px) scale(0.6); opacity: 0; }
+  20% { transform: translateY(0) scale(1.15); opacity: 1; }
+  80% { transform: translateY(-30px) scale(1); opacity: 1; }
+  100% { transform: translateY(-60px) scale(0.9); opacity: 0; }
+}
+
+.glow {
+  animation: glow 1.2s ease-in-out 2;
+}
+@keyframes glow {
+  0%, 100% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+  50% { box-shadow: 0 0 0 6px #ffd34d, 0 0 60px #ffd34d; }
+}
+
+.zoomIn {
+  animation: zoomIn 0.8s cubic-bezier(0.2, 1.5, 0.4, 1) both;
+}
+@keyframes zoomIn {
+  from { transform: scale(0.2); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.shake {
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+@keyframes shake {
+  10%, 90% { transform: translateX(-4px); }
+  20%, 80% { transform: translateX(8px); }
+  30%, 50%, 70% { transform: translateX(-12px); }
+  40%, 60% { transform: translateX(12px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tileInner { transition: none; }
+  .strikeX, .zoomIn, .awardPop, .shake, .glow { animation: none; }
+}
