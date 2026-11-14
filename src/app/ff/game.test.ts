@@ -4,7 +4,16 @@ import { BANK, initialState, reducer, type GameState, type Action } from "./game
 
 const TEAMS = ["Lions", "Tigers", "Bears", "Wolves"];
 const run = (s: GameState, ...actions: Action[]) => actions.reduce(reducer, s);
-const started = () => run(initialState(), { type: "start", teams: TEAMS });
+const introduced = () => run(initialState(), { type: "start", teams: TEAMS });
+const started = () =>
+  run(
+    introduced(),
+    { type: "revealTeam" },
+    { type: "revealTeam" },
+    { type: "revealTeam" },
+    { type: "revealTeam" },
+    { type: "beginMatches" },
+  );
 
 test("bank typos are fixed and every question has 6 answers", () => {
   assert.equal(BANK.length, 6);
@@ -14,13 +23,37 @@ test("bank typos are fixed and every question has 6 answers", () => {
   assert.ok(all.includes("Magic Carpet"));
 });
 
-test("start: match 1 is team 0 vs 1 on question 0", () => {
+test("beginMatches: match 1 is team 0 vs 1 on question 0", () => {
   const s = started();
   assert.equal(s.stage, "playing");
   assert.deepEqual(s.matches[0].teams, [0, 1]);
   assert.deepEqual(s.matches[0].questions, [0, 1]);
   assert.equal(s.round?.q, 0);
   assert.equal(s.round?.bank, 0);
+});
+
+test("start goes to the team intro with no teams revealed and no match yet", () => {
+  const s = introduced();
+  assert.equal(s.stage, "intro");
+  assert.equal(s.introRevealed, 0);
+  assert.equal(s.matches.length, 0);
+  assert.equal(s.round, null);
+});
+
+test("revealTeam reveals teams one at a time in order, max 4, with an event each", () => {
+  let s = run(introduced(), { type: "revealTeam" });
+  assert.equal(s.introRevealed, 1);
+  assert.deepEqual(s.event.kind, "teamReveal");
+  assert.equal(s.event.kind === "teamReveal" && s.event.index, 0);
+  s = run(s, { type: "revealTeam" }, { type: "revealTeam" }, { type: "revealTeam" });
+  assert.equal(s.introRevealed, 4);
+  assert.equal(s.event.kind === "teamReveal" && s.event.index, 3);
+  assert.equal(run(s, { type: "revealTeam" }), s);
+});
+
+test("beginMatches only works once all 4 teams are revealed", () => {
+  const partial = run(introduced(), { type: "revealTeam" });
+  assert.equal(run(partial, { type: "beginMatches" }), partial);
 });
 
 test("start trims names and falls back to Team N for blanks", () => {
@@ -111,6 +144,8 @@ test("next is ignored outside of play; nextMatch is ignored unless a match is ov
   assert.equal(run(s0, { type: "next" }), s0);
   const s1 = started();
   assert.equal(run(s1, { type: "nextMatch" }), s1);
+  assert.equal(run(s0, { type: "revealTeam" }), s0);
+  assert.equal(run(s1, { type: "revealTeam" }), s1);
 });
 
 test("toggleQuestion flips board visibility; reset returns to setup", () => {

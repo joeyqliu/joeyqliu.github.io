@@ -36,14 +36,20 @@ export default function HostConsole() {
         undo();
         return;
       }
-      if (e.metaKey || e.ctrlKey || e.altKey || state.stage !== "playing") return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (state.stage === "intro" && (e.code === "Space" || e.key === "Enter")) {
+        e.preventDefault();
+        dispatch({ type: state.introRevealed >= 4 ? "beginMatches" : "revealTeam" });
+        return;
+      }
+      if (state.stage !== "playing") return;
       if (/^[1-6]$/.test(e.key)) dispatch({ type: "reveal", index: Number(e.key) - 1 });
       else if (e.key.toLowerCase() === "x") dispatch({ type: "strike" });
       else if (e.key.toLowerCase() === "q") dispatch({ type: "toggleQuestion" });
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [dispatch, undo, state.stage]);
+  }, [dispatch, undo, state.stage, state.introRevealed]);
 
   if (!loaded) return <div className="min-h-screen bg-[#0b1020]" />;
 
@@ -78,6 +84,7 @@ export default function HostConsole() {
             <ol className="list-decimal pl-6 text-white/70 space-y-1">
               <li>Click <b>Open board window</b>, drag it onto the projector, and click it once (turns on sound + full screen).</li>
               <li>Enter the four team names and start. Match 1 is Team 1 vs Team 2, Match 2 is Team 3 vs Team 4, then the winners meet in the final.</li>
+              <li>After you start, the board shows <b>Meet the teams</b>. Reveal each team (Space), then start Match 1.</li>
               <li>Keys while playing: <b>1–6</b> reveal, <b>X</b> strike, <b>Q</b> show/hide question on board, <b>⌘Z</b> undo.</li>
             </ol>
             <form
@@ -104,6 +111,38 @@ export default function HostConsole() {
                 Start game →
               </button>
             </form>
+          </section>
+        )}
+
+        {state.stage === "intro" && (
+          <section className="flex flex-col gap-5">
+            <div className="text-sm font-black tracking-[0.25em] text-[#ffd34d]">MEET THE TEAMS · {state.introRevealed} OF 4 REVEALED</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {state.teams.map((t, i) => {
+                const shown = i < state.introRevealed;
+                return (
+                  <div
+                    key={i}
+                    className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-lg font-semibold ${
+                      shown ? "border-[#2459d6] bg-[#2459d6]/30" : "border-white/15 bg-white/5 text-white/60"
+                    }`}
+                  >
+                    <span className="text-sm text-white/50 w-24">{i < 2 ? "Match 1" : "Match 2"}</span>
+                    <span className="flex-1">{t}</span>
+                    <span className="text-sm">{shown ? "✓ on board" : "hidden"}</span>
+                  </div>
+                );
+              })}
+            </div>
+            {state.introRevealed < 4 ? (
+              <button onClick={() => dispatch({ type: "revealTeam" })} className={`${btn} bg-[#ffd34d] text-black text-xl py-4 hover:brightness-110`}>
+                Reveal team {state.introRevealed + 1}: {state.teams[state.introRevealed]} (Space)
+              </button>
+            ) : (
+              <button onClick={() => dispatch({ type: "beginMatches" })} className={`${btn} bg-[#ffd34d] text-black text-xl py-4 hover:brightness-110`}>
+                Start match 1 → (Space)
+              </button>
+            )}
           </section>
         )}
 
@@ -237,7 +276,7 @@ export default function HostConsole() {
           </section>
         )}
 
-        {state.stage !== "setup" && (
+        {state.stage !== "setup" && state.stage !== "intro" && (
           <section>
             <h2 className="mb-2 text-sm font-black tracking-[0.25em] text-white/50">BRACKET</h2>
             <Bracket state={state} />

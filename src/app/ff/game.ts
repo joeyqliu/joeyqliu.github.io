@@ -112,12 +112,15 @@ export type GameEvent =
   | { id: number; kind: "strike"; count: number }
   | { id: number; kind: "award"; side: Side; points: number }
   | { id: number; kind: "round" }
+  | { id: number; kind: "teamReveal"; index: number }
   | { id: number; kind: "matchOver"; winner: number }
   | { id: number; kind: "champion"; team: number };
 
 export type GameState = {
-  stage: "setup" | "playing" | "matchOver" | "champion";
+  stage: "setup" | "intro" | "playing" | "matchOver" | "champion";
   teams: string[];
+  /** How many team names have been revealed on the board's "meet the teams" screen (0–4). */
+  introRevealed: number;
   matches: Match[];
   matchIndex: number;
   round: Round | null;
@@ -127,6 +130,8 @@ export type GameState = {
 
 export type Action =
   | { type: "start"; teams: string[] }
+  | { type: "revealTeam" }
+  | { type: "beginMatches" }
   | { type: "reveal"; index: number }
   | { type: "strike" }
   | { type: "clearStrikes" }
@@ -142,6 +147,7 @@ export function initialState(): GameState {
   return {
     stage: "setup",
     teams: ["Team 1", "Team 2", "Team 3", "Team 4"],
+    introRevealed: 0,
     matches: [],
     matchIndex: 0,
     round: null,
@@ -182,14 +188,26 @@ export function reducer(s: GameState, a: Action): GameState {
   switch (a.type) {
     case "start": {
       const teams = [0, 1, 2, 3].map((i) => (a.teams[i] ?? "").trim() || `Team ${i + 1}`);
+      return withEvent({ ...initialState(), stage: "intro", teams, event: s.event }, { kind: "none" });
+    }
+
+    case "revealTeam": {
+      if (s.stage !== "intro" || s.introRevealed >= 4) return s;
+      return withEvent(
+        { ...s, introRevealed: s.introRevealed + 1 },
+        { kind: "teamReveal", index: s.introRevealed },
+      );
+    }
+
+    case "beginMatches": {
+      if (s.stage !== "intro" || s.introRevealed < 4) return s;
       return withEvent(
         {
-          ...initialState(),
+          ...s,
           stage: "playing",
-          teams,
           matches: [newMatch([0, 1], MATCH_QUESTIONS[0])],
+          matchIndex: 0,
           round: newRound(MATCH_QUESTIONS[0][0]),
-          event: s.event,
         },
         { kind: "round" },
       );
