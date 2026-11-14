@@ -13,3 +13,5 @@
 - **Host:** the current matchup and question, all answers with points (reveal buttons + keys 1–6), Strike (X), award buttons, a "show question on board" toggle, next question/match, undo, reset. It shows the bracket and a button to open the board window.
 
 **Builder's calls:** two typo fixes in the bank ("Lomg Jump" → "Long Jump", "magic Carpet" → "Magic Carpet"); colors and sounds; game logic in a pure reducer (`src/app/ff/game.ts`) unit-tested with `node --test`.
+
+**Follow-up: team intro.** After Start, the board leaves the title screen for its own "MEET THE TEAMS" page with 4 face-down cards laid out as the bracket (Match 1 T1 vs T2, Match 2 T3 vs T4). The host reveals them in order (button or Space). Each flip gets a bell and confetti, and the 4th adds a fanfare and "LET'S PLAY!". "Start match 1" is enabled once all four are revealed. Names never appear on the board before their reveal.

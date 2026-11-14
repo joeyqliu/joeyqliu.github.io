@@ -106,6 +106,11 @@ export default function Board() {
           1700,
         );
         break;
+      case "teamReveal":
+        fx.bell();
+        cf?.burst(w * (ev.index % 2 ? 0.75 : 0.25), h * (ev.index < 2 ? 0.4 : 0.72), 70, 360, -90, 12);
+        if (ev.index === 3) window.setTimeout(() => fx.fanfare(), 350);
+        break;
       case "matchOver":
         fx.fanfare();
         cf?.burst(0, h, 140, 50, -60, 24);
@@ -198,6 +203,8 @@ function Screen({
       </div>
     );
   }
+
+  if (state.stage === "intro") return <TeamIntro state={state} />;
 
   if (state.stage === "champion" && state.champion !== null) {
     return (
@@ -353,6 +360,60 @@ function Screen({
             </div>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+/** "Meet the teams": its own screen after the title. Cards flip as the host reveals them. */
+function TeamIntro({ state }: { state: GameState }) {
+  const revealed = state.introRevealed ?? 0;
+  const card = (i: number) => {
+    const shown = i < revealed;
+    return (
+      <div className={`${s.tile} flex-1 min-w-0`} style={{ height: "min(18vh, 12vw)" }}>
+        <div className={`${s.tileInner} ${shown ? s.flipped : ""}`}>
+          <div className={`${s.face} ${s.front}`}>
+            <div className={s.numOval} style={{ width: "min(9vw, 13vh)", height: "min(6vw, 9vh)", fontSize: "min(3.6vw, 5.5vh)" }}>
+              ?
+            </div>
+          </div>
+          <div className={`${s.face} ${s.back}`} style={{ justifyContent: "center" }}>
+            {shown && (
+              <span className="font-black uppercase px-[1.5vw] truncate" style={{ fontSize: "clamp(1.4rem, min(4vw, 7vh), 5rem)" }}>
+                {state.teams[i]}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+  return (
+    <div className="h-full flex flex-col items-center justify-center gap-[4vh] px-[5vw]">
+      <div className="font-black tracking-[0.35em] text-[#ffd34d]" style={{ fontSize: "clamp(1.4rem, min(3.4vw, 6vh), 3.6rem)" }}>
+        MEET THE TEAMS
+      </div>
+      {[0, 1].map((m) => (
+        <div key={m} className="w-full flex flex-col items-center gap-[1.5vh]">
+          <div className="font-black tracking-[0.3em] text-white/60" style={{ fontSize: "clamp(0.9rem, min(1.6vw, 2.8vh), 1.6rem)" }}>
+            MATCH {m + 1}
+          </div>
+          <div className="w-full flex items-center gap-[2.5vw]">
+            {card(m * 2)}
+            <div className="font-black text-[#ffd34d] shrink-0" style={{ fontSize: "clamp(1.4rem, min(3.6vw, 6vh), 4rem)" }}>
+              VS
+            </div>
+            {card(m * 2 + 1)}
+          </div>
+        </div>
+      ))}
+      <div className="h-[8vh] flex items-center">
+        {revealed >= 4 && (
+          <div className={`${s.logo} ${s.zoomIn}`} style={{ fontSize: "min(6vw, 9vh)" }}>
+            LET&apos;S PLAY!
+          </div>
+        )}
       </div>
     </div>
   );
