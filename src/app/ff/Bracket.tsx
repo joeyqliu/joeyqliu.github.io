@@ -28,9 +28,9 @@ export default function Bracket({ state, big = false }: { state: GameState; big?
           return (
             <div
               key={side}
-              className={`flex justify-between gap-4 font-bold ${big ? "text-3xl py-1" : "text-base"} ${won ? "text-[#ffd34d]" : lost ? "text-white/35 line-through" : "text-white"}`}
+              className={`flex justify-between items-baseline gap-4 font-bold leading-tight ${big ? "text-[clamp(1rem,min(2vw,3.6vh),2rem)] py-1" : "text-base"} ${won ? "text-[#ffd34d]" : lost ? "text-white/35 line-through" : "text-white"}`}
             >
-              <span>
+              <span className="min-w-0 text-left break-words">
                 {t === null ? "TBD" : teams[t]} {won && "🏆"}
               </span>
               {m && <span className="tabular-nums">{m.scores[side]}</span>}
