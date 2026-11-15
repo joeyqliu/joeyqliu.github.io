@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Confetti, Sfx } from "@/lib/effects";
 import Bracket from "../Bracket";
+import FitText from "../FitText";
 import { BANK, matchLabel, type GameEvent, type GameState } from "../game";
 import { useBoardState } from "../sync";
 import s from "../ff.module.css";
@@ -28,12 +29,9 @@ function TeamPanel({
         key={`glow-${glowKey}`}
         className={`${glowKey ? s.glow : ""} rounded-2xl bg-[#0b1f5c] border-[3px] border-[#8fb3ff] px-[2vw] py-[1vh] w-full text-center`}
       >
-        <div
-          className="font-black uppercase truncate"
-          style={{ fontSize: "clamp(1rem, min(2.4vw, 4vh), 2.6rem)" }}
-        >
+        <FitText className="font-black uppercase w-full h-[7.5vh]" maxFrac={0.55}>
           {name}
-        </div>
+        </FitText>
         <div
           className="font-black text-[#ffd34d] tabular-nums leading-none"
           style={{ fontSize: "clamp(2rem, min(5vw, 9vh), 6rem)" }}
@@ -215,11 +213,10 @@ function Screen({
         <div className={`${s.logo} leading-none`} style={{ fontSize: "min(6vw, 10vh)" }}>
           CHAMPIONS
         </div>
-        <div
-          className={`${s.zoomIn} font-black uppercase leading-none`}
-          style={{ fontSize: "min(8vw, 13vh)", animationDelay: "0.3s" }}
-        >
-          {state.teams[state.champion]}
+        <div className={`${s.zoomIn} w-full`} style={{ animationDelay: "0.3s" }}>
+          <FitText className="font-black uppercase w-full h-[22vh]" maxFrac={0.62}>
+            {state.teams[state.champion]}
+          </FitText>
         </div>
         <div className="w-full max-w-6xl mt-[3vh]">
           <Bracket state={state} />
@@ -231,18 +228,17 @@ function Screen({
   const match = state.matches[state.matchIndex];
   if (state.stage === "matchOver" && match?.winner != null) {
     return (
-      <div className="h-full flex flex-col items-center justify-center gap-[4vh] px-8 text-center">
+      <div className="h-full flex flex-col items-center justify-center gap-[3vh] px-8 text-center">
         <div
           className="font-black tracking-[0.3em] text-[#ffd34d]"
           style={{ fontSize: "clamp(1rem, 2.4vw, 2.6rem)" }}
         >
           {matchLabel(state.matchIndex)} WINNER
         </div>
-        <div
-          className={`${s.zoomIn} font-black uppercase`}
-          style={{ fontSize: "min(9vw, 15vh)" }}
-        >
-          🏆 {state.teams[match.winner]}
+        <div className={`${s.zoomIn} w-full`}>
+          <FitText className="font-black uppercase w-full h-[26vh]" maxFrac={0.6}>
+            🏆 {state.teams[match.winner]}
+          </FitText>
         </div>
         <div className="w-full max-w-6xl">
           <Bracket state={state} big />
@@ -305,11 +301,10 @@ function Screen({
       </div>
 
       {round.showQuestion && (
-        <div
-          className={`${s.zoomIn} text-center font-bold rounded-2xl bg-black/30 border border-white/15 px-6 py-[1.2vh]`}
-          style={{ fontSize: "clamp(1rem, min(2.2vw, 3.6vh), 2.4rem)" }}
-        >
-          {q.question}
+        <div className={`${s.zoomIn} rounded-2xl bg-black/40 border-2 border-white/25 px-[2vw] py-[1vh]`}>
+          <FitText className="font-extrabold w-full h-[17vh]" maxFrac={0.48}>
+            {q.question}
+          </FitText>
         </div>
       )}
 
@@ -371,7 +366,7 @@ function TeamIntro({ state }: { state: GameState }) {
   const card = (i: number) => {
     const shown = i < revealed;
     return (
-      <div className={`${s.tile} flex-1 min-w-0`} style={{ height: "min(18vh, 12vw)" }}>
+      <div className={`${s.tile} flex-1 min-w-0`} style={{ height: "min(20vh, 13vw)" }}>
         <div className={`${s.tileInner} ${shown ? s.flipped : ""}`}>
           <div className={`${s.face} ${s.front}`}>
             <div className={s.numOval} style={{ width: "min(9vw, 13vh)", height: "min(6vw, 9vh)", fontSize: "min(3.6vw, 5.5vh)" }}>
@@ -380,9 +375,9 @@ function TeamIntro({ state }: { state: GameState }) {
           </div>
           <div className={`${s.face} ${s.back}`} style={{ justifyContent: "center" }}>
             {shown && (
-              <span className="font-black uppercase px-[1.5vw] truncate" style={{ fontSize: "clamp(1.4rem, min(4vw, 7vh), 5rem)" }}>
+              <FitText className="font-black uppercase w-full h-full px-[1.5vw] py-[1vh]" maxFrac={0.5}>
                 {state.teams[i]}
-              </span>
+              </FitText>
             )}
           </div>
         </div>
