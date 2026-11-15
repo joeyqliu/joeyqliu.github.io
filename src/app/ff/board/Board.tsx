@@ -4,11 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Confetti, Sfx } from "@/lib/effects";
 import Bracket from "../Bracket";
 import FitText from "../FitText";
-import { BANK, matchLabel, type GameEvent, type GameState } from "../game";
+import { BANK, INSTRUCTIONS, matchLabel, type GameEvent, type GameState } from "../game";
 import { useBoardState } from "../sync";
 import s from "../ff.module.css";
 
-const fitText = "clamp(1.1rem, min(3vw, 5.2vh), 3.4rem)";
 
 function TeamPanel({
   name,
@@ -203,6 +202,7 @@ function Screen({
   }
 
   if (state.stage === "intro") return <TeamIntro state={state} />;
+  if (state.stage === "instructions") return <Instructions />;
 
   if (state.stage === "champion" && state.champion !== null) {
     return (
@@ -333,17 +333,18 @@ function Screen({
                   {/* Answer text only exists in the DOM once revealed: nothing to leak on the projector. */}
                   {shown && (
                     <>
-                      <span
-                        className="font-black uppercase pl-[1.4vw] pr-2 leading-tight truncate"
-                        style={{ fontSize: fitText }}
+                      <FitText
+                        className="flex-1 min-w-0 h-full font-black uppercase pl-[1.4vw] pr-[1vw] py-[0.6vh]"
+                        maxFrac={0.62}
+                        align="left"
                       >
                         {a.ans}
-                      </span>
+                      </FitText>
                       <span
-                        className="h-full flex items-center justify-center bg-[#0b2a8a] border-l-[3px] border-[#8fb3ff] font-black tabular-nums rounded-r-[11px]"
+                        className="h-full shrink-0 flex items-center justify-center bg-[#0b2a8a] border-l-[3px] border-[#8fb3ff] font-black tabular-nums rounded-r-[11px]"
                         style={{
-                          fontSize: fitText,
-                          minWidth: "min(9vw, 15vh)",
+                          fontSize: "clamp(1.4rem, min(4.8vw, 8vh), 5.5rem)",
+                          minWidth: "min(12vw, 19vh)",
                         }}
                       >
                         {a.pnt * q.multiply}
@@ -410,6 +411,34 @@ function TeamIntro({ state }: { state: GameState }) {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+/** Shown between "Meet the teams" and match 1. */
+function Instructions() {
+  return (
+    <div className="h-full flex flex-col items-center justify-center gap-[4vh] px-[6vw]">
+      <div className={`${s.logo} ${s.zoomIn} leading-none`} style={{ fontSize: "min(9vw, 15vh)" }}>
+        INSTRUCTIONS
+      </div>
+      {INSTRUCTIONS.map((line, i) => (
+        <div
+          key={i}
+          className={`${s.zoomIn} w-full flex items-center gap-[2.5vw] rounded-2xl border-[3px] border-[#8fb3ff] px-[2.5vw] py-[2vh]`}
+          style={{ background: "linear-gradient(180deg, #2e6bff, #1a44c4)", animationDelay: `${0.4 + i * 0.4}s` }}
+        >
+          <div
+            className={`${s.numOval} shrink-0`}
+            style={{ width: "min(11vw, 15vh)", height: "min(7.5vw, 10vh)", fontSize: "min(4.5vw, 6.5vh)" }}
+          >
+            {i + 1}
+          </div>
+          <FitText className="flex-1 min-w-0 h-[16vh] font-black uppercase" maxFrac={0.42} align="left">
+            {line}
+          </FitText>
+        </div>
+      ))}
     </div>
   );
 }

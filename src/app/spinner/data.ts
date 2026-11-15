@@ -1,13 +1,16 @@
 export const STYLES = [
   "Western",
   "Gen Z",
-  "Silent movie",
+  "Dance",
   "Cooking show",
   "Musical",
   "Ye Olde English (Shakespearean)",
   "Pirate",
   "Nursing home",
 ];
+
+/** The game ends after this many teams, even though the wheels have more options left. */
+export const MAX_TEAMS = 6;
 
 export const STORIES = [
   "Jonah and the big fish",
@@ -24,7 +27,7 @@ export const STORIES = [
 export const STYLE_EMOJI: Record<string, string> = {
   Western: "🤠",
   "Gen Z": "💅",
-  "Silent movie": "🎞️",
+  Dance: "💃",
   "Cooking show": "👨‍🍳",
   Musical: "🎶",
   "Ye Olde English (Shakespearean)": "🎭",

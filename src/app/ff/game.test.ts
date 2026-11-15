@@ -12,6 +12,7 @@ const started = () =>
     { type: "revealTeam" },
     { type: "revealTeam" },
     { type: "revealTeam" },
+    { type: "showInstructions" },
     { type: "beginMatches" },
   );
 
@@ -51,9 +52,22 @@ test("revealTeam reveals teams one at a time in order, max 4, with an event each
   assert.equal(run(s, { type: "revealTeam" }), s);
 });
 
-test("beginMatches only works once all 4 teams are revealed", () => {
+const allRevealed = () =>
+  run(introduced(), { type: "revealTeam" }, { type: "revealTeam" }, { type: "revealTeam" }, { type: "revealTeam" });
+
+test("showInstructions only works once all 4 teams are revealed", () => {
   const partial = run(introduced(), { type: "revealTeam" });
-  assert.equal(run(partial, { type: "beginMatches" }), partial);
+  assert.equal(run(partial, { type: "showInstructions" }), partial);
+  const s = run(allRevealed(), { type: "showInstructions" });
+  assert.equal(s.stage, "instructions");
+  assert.equal(s.matches.length, 0);
+});
+
+test("beginMatches comes from the instructions screen, not straight from the intro", () => {
+  const revealed = allRevealed();
+  assert.equal(run(revealed, { type: "beginMatches" }), revealed);
+  const s = run(revealed, { type: "showInstructions" }, { type: "beginMatches" });
+  assert.equal(s.stage, "playing");
 });
 
 test("start trims names and falls back to Team N for blanks", () => {

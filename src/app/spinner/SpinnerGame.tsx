@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import Image from "next/image";
 import Wheel, { spinEase, targetRotation } from "./Wheel";
 import { Confetti, Sfx } from "@/lib/effects";
-import { MEME_LINES, STORIES, STORY_EMOJI, STYLES, STYLE_EMOJI, WHEEL_COLORS } from "./data";
+import { MAX_TEAMS, MEME_LINES, STORIES, STORY_EMOJI, STYLES, STYLE_EMOJI, WHEEL_COLORS } from "./data";
 import s from "./spinner.module.css";
 
 type Pairing = { style: string; story: string };
@@ -37,6 +38,7 @@ export default function SpinnerGame() {
   const [storyLanded, setStoryLanded] = useState<string | null>(null);
   const [lastOne, setLastOne] = useState<{ style: boolean; story: boolean }>({ style: false, story: false });
   const [shake, setShake] = useState(false);
+  const [overlay, setOverlay] = useState<"teams" | "map" | null>(null);
   const [memes, setMemes] = useState<Meme[]>([]);
   const [drops, setDrops] = useState<Drop[]>([]);
   const [hits, setHits] = useState<{ id: number; x: number; y: number }[]>([]);
@@ -62,7 +64,9 @@ export default function SpinnerGame() {
       if (raw) {
         const parsed = JSON.parse(raw) as Pairing[];
         if (Array.isArray(parsed)) {
-          const valid = parsed.filter((p) => STYLES.includes(p.style) && STORIES.includes(p.story));
+          const valid = parsed
+            .filter((p) => STYLES.includes(p.style) && STORIES.includes(p.story))
+            .slice(0, MAX_TEAMS);
           setTaken(valid);
           setResumedCount(valid.length);
         }
@@ -108,7 +112,8 @@ export default function SpinnerGame() {
   const remainingStories = STORIES.filter((x) => !taken.some((t) => t.story === x));
   const wheelStyles = frozen?.styles ?? remainingStyles;
   const wheelStories = frozen?.stories ?? remainingStories;
-  const done = loaded && (remainingStyles.length === 0 || remainingStories.length === 0);
+  const done =
+    loaded && (taken.length >= MAX_TEAMS || remainingStyles.length === 0 || remainingStories.length === 0);
 
   /**
    * Animate one wheel frame-by-frame. Visuals and sound come from the same
@@ -320,7 +325,7 @@ export default function SpinnerGame() {
     };
     const styles = shuffle(remainingStyles);
     const stories = shuffle(remainingStories);
-    const count = Math.min(styles.length, stories.length);
+    const count = Math.min(styles.length, stories.length, MAX_TEAMS - taken.length);
     const picks = Array.from({ length: count }, (_, i) => ({ style: styles[i], story: stories[i] }));
     setResumedCount(0);
     setTaken((t) => [...t, ...picks]);
@@ -341,6 +346,13 @@ export default function SpinnerGame() {
   // Space / Enter: spin or advance
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (overlay) {
+        if (e.key === "Escape" || e.code === "Space" || e.code === "Enter") {
+          e.preventDefault();
+          setOverlay(null);
+        }
+        return;
+      }
       if (e.code !== "Space" && e.code !== "Enter") return;
       e.preventDefault();
       if (phase === "idle") spin();
@@ -348,7 +360,7 @@ export default function SpinnerGame() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [phase, spin, nextTeam]);
+  }, [phase, spin, nextTeam, overlay]);
 
   const showFinal = done && phase === "idle";
   const teamNumber = taken.length;
@@ -378,6 +390,22 @@ export default function SpinnerGame() {
             <h1 className={`${s.title} text-4xl lg:text-5xl font-black tracking-tight text-center`}>SKIT SPINNER</h1>
           )}
           <div className="flex gap-2 shrink-0">
+            <button
+              onClick={() => setOverlay("teams")}
+              disabled={phase === "spinning"}
+              className="text-sm font-semibold rounded-full bg-white/10 hover:bg-white/20 px-4 h-12 disabled:opacity-40"
+              title="Show the teams picked so far"
+            >
+              👥 Teams
+            </button>
+            <button
+              onClick={() => setOverlay("map")}
+              disabled={phase === "spinning"}
+              className="text-sm font-semibold rounded-full bg-white/10 hover:bg-white/20 px-4 h-12 disabled:opacity-40"
+              title="Show the seating map"
+            >
+              🗺️ Map
+            </button>
             {!done && (
               <button
                 onClick={instantPick}
@@ -399,28 +427,7 @@ export default function SpinnerGame() {
         </header>
 
         {showFinal ? (
-          <ol className="grid w-full flex-1 min-h-0 gap-3 lg:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2">
-            {taken.map((t, i) => (
-              <li
-                key={i}
-                className={`${s.landedChip} flex flex-col items-center justify-center text-center rounded-3xl px-4 py-3 text-[#1a0b3b] shadow-2xl min-h-0`}
-                style={{
-                  background: WHEEL_COLORS[i % WHEEL_COLORS.length],
-                  animationDelay: `${i * 0.12}s`,
-                  fontSize: "clamp(1.1rem, min(2.5vw, 4.4vh), 3rem)",
-                }}
-              >
-                <div className="font-black tracking-[0.25em] opacity-70 text-[0.65em] mb-[0.4em]">TEAM {i + 1}</div>
-                <div className="font-black leading-[1.1]">
-                  {STYLE_EMOJI[t.style]} {t.style}
-                </div>
-                <div className="font-black text-white text-[0.8em] leading-none my-[0.35em]">×</div>
-                <div className="font-black leading-[1.1]">
-                  {STORY_EMOJI[t.story]} {t.story}
-                </div>
-              </li>
-            ))}
-          </ol>
+          <Lineup taken={taken} />
         ) : (
           <div className="grid w-full max-w-7xl gap-6 lg:grid-cols-[minmax(0,1fr)_17rem] items-start flex-1">
             <div className="flex flex-col items-center gap-3">
@@ -476,7 +483,7 @@ export default function SpinnerGame() {
                 </div>
               )}
               <h3 className="text-sm uppercase tracking-[0.25em] text-white/50 mb-2 text-center lg:text-left">
-                Teams ({taken.length}/{Math.min(STYLES.length, STORIES.length)})
+                Teams ({taken.length}/{MAX_TEAMS})
               </h3>
               {taken.length === 0 ? (
                 <p className="text-white/40 text-sm text-center lg:text-left">No teams yet. Hit spin!</p>
@@ -544,6 +551,36 @@ export default function SpinnerGame() {
         </div>
       ))}
 
+      {overlay && (
+        <div
+          className="fixed inset-0 z-[60] flex flex-col bg-[#120726]/95 backdrop-blur-sm p-4 sm:p-6 gap-3"
+          onClick={() => setOverlay(null)}
+          role="dialog"
+          aria-label={overlay === "teams" ? "Teams" : "Seating map"}
+        >
+          <div className="flex items-center justify-between gap-4">
+            <span className="w-24" />
+            <h2 className="text-2xl lg:text-3xl font-black tracking-[0.3em] text-white/80 text-center">
+              {overlay === "teams" ? "THE TEAMS" : "SEATING MAP"}
+            </h2>
+            <button className="text-sm font-semibold rounded-full bg-white/10 hover:bg-white/20 px-4 h-12 w-24">✕ Close</button>
+          </div>
+          {overlay === "teams" ? (
+            taken.length ? (
+              <Lineup taken={taken} />
+            ) : (
+              <div className="flex-1 flex items-center justify-center text-3xl font-black text-white/60">
+                No teams picked yet
+              </div>
+            )
+          ) : (
+            <div className="relative flex-1 min-h-0">
+              <Image src="/seating-map.png" alt="Seating map with team zones 1 to 6" fill unoptimized priority className="object-contain" />
+            </div>
+          )}
+        </div>
+      )}
+
       {drops.map((d) => (
         <div
           key={d.id}
@@ -562,5 +599,33 @@ export default function SpinnerGame() {
         </div>
       ))}
     </div>
+  );
+}
+
+/** All picked teams as big cards (end screen and the 👥 Teams overlay). */
+function Lineup({ taken }: { taken: Pairing[] }) {
+  return (
+    <ol className="grid w-full flex-1 min-h-0 gap-3 lg:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:grid-rows-2">
+      {taken.map((t, i) => (
+        <li
+          key={i}
+          className={`${s.landedChip} flex flex-col items-center justify-center text-center rounded-3xl px-4 py-3 text-[#1a0b3b] shadow-2xl min-h-0`}
+          style={{
+            background: WHEEL_COLORS[i % WHEEL_COLORS.length],
+            animationDelay: `${i * 0.12}s`,
+            fontSize: "clamp(1.1rem, min(2.9vw, 4.6vh), 3.4rem)",
+          }}
+        >
+          <div className="font-black tracking-[0.25em] opacity-70 text-[0.65em] mb-[0.4em]">TEAM {i + 1}</div>
+          <div className="font-black leading-[1.1]">
+            {STYLE_EMOJI[t.style]} {t.style}
+          </div>
+          <div className="font-black text-white text-[0.8em] leading-none my-[0.35em]">×</div>
+          <div className="font-black leading-[1.1]">
+            {STORY_EMOJI[t.story]} {t.story}
+          </div>
+        </li>
+      ))}
+    </ol>
   );
 }
