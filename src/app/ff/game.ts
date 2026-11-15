@@ -116,8 +116,14 @@ export type GameEvent =
   | { id: number; kind: "matchOver"; winner: number }
   | { id: number; kind: "champion"; team: number };
 
+/** Shown on the board between "Meet the teams" and match 1. */
+export const INSTRUCTIONS = [
+  "Get into your team",
+  "Pick 6 representatives to send onto stage to play Family Feud",
+];
+
 export type GameState = {
-  stage: "setup" | "intro" | "playing" | "matchOver" | "champion";
+  stage: "setup" | "intro" | "instructions" | "playing" | "matchOver" | "champion";
   teams: string[];
   /** How many team names have been revealed on the board's "meet the teams" screen (0–4). */
   introRevealed: number;
@@ -131,6 +137,7 @@ export type GameState = {
 export type Action =
   | { type: "start"; teams: string[] }
   | { type: "revealTeam" }
+  | { type: "showInstructions" }
   | { type: "beginMatches" }
   | { type: "reveal"; index: number }
   | { type: "strike" }
@@ -199,8 +206,13 @@ export function reducer(s: GameState, a: Action): GameState {
       );
     }
 
-    case "beginMatches": {
+    case "showInstructions": {
       if (s.stage !== "intro" || s.introRevealed < 4) return s;
+      return withEvent({ ...s, stage: "instructions" }, { kind: "none" });
+    }
+
+    case "beginMatches": {
+      if (s.stage !== "instructions") return s;
       return withEvent(
         {
           ...s,

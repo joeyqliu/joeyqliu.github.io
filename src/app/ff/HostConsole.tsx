@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Bracket from "./Bracket";
-import { BANK, matchLabel } from "./game";
+import { BANK, INSTRUCTIONS, matchLabel } from "./game";
 import { useHostGame } from "./sync";
 
 const btn = "rounded-xl px-4 py-2 font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed";
@@ -39,7 +39,12 @@ export default function HostConsole() {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       if (state.stage === "intro" && (e.code === "Space" || e.key === "Enter")) {
         e.preventDefault();
-        dispatch({ type: state.introRevealed >= 4 ? "beginMatches" : "revealTeam" });
+        dispatch({ type: state.introRevealed >= 4 ? "showInstructions" : "revealTeam" });
+        return;
+      }
+      if (state.stage === "instructions" && (e.code === "Space" || e.key === "Enter")) {
+        e.preventDefault();
+        dispatch({ type: "beginMatches" });
         return;
       }
       if (state.stage !== "playing") return;
@@ -139,10 +144,27 @@ export default function HostConsole() {
                 Reveal team {state.introRevealed + 1}: {state.teams[state.introRevealed]} (Space)
               </button>
             ) : (
-              <button onClick={() => dispatch({ type: "beginMatches" })} className={`${btn} bg-[#ffd34d] text-black text-xl py-4 hover:brightness-110`}>
-                Start match 1 → (Space)
+              <button onClick={() => dispatch({ type: "showInstructions" })} className={`${btn} bg-[#ffd34d] text-black text-xl py-4 hover:brightness-110`}>
+                Show instructions → (Space)
               </button>
             )}
+          </section>
+        )}
+
+        {state.stage === "instructions" && (
+          <section className="flex flex-col gap-5">
+            <div className="text-sm font-black tracking-[0.25em] text-[#ffd34d]">INSTRUCTIONS · ON THE BOARD NOW</div>
+            <ol className="flex flex-col gap-3">
+              {INSTRUCTIONS.map((line, i) => (
+                <li key={i} className="flex items-center gap-3 rounded-xl border border-[#2459d6] bg-[#2459d6]/30 px-4 py-3 text-lg font-semibold">
+                  <span className="text-[#ffd34d] font-black">{i + 1}</span>
+                  {line}
+                </li>
+              ))}
+            </ol>
+            <button onClick={() => dispatch({ type: "beginMatches" })} className={`${btn} bg-[#ffd34d] text-black text-xl py-4 hover:brightness-110`}>
+              Start match 1 → (Space)
+            </button>
           </section>
         )}
 
@@ -276,7 +298,7 @@ export default function HostConsole() {
           </section>
         )}
 
-        {state.stage !== "setup" && state.stage !== "intro" && (
+        {state.stage !== "setup" && state.stage !== "intro" && state.stage !== "instructions" && (
           <section>
             <h2 className="mb-2 text-sm font-black tracking-[0.25em] text-white/50">BRACKET</h2>
             <Bracket state={state} />
