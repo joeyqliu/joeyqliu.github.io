@@ -3,6 +3,7 @@ import { EnvelopeIcon, GithubLogoIcon, LinkedinLogoIcon } from "@phosphor-icons/
 import ThemeToggle from "@/components/ThemeToggle";
 import { education, resumeJobs } from "@/data/experience";
 import styles from "./resume.module.css";
+import PrintButton from "./PrintButton";
 
 // Jobs + education live in src/data/experience.ts.
 // Contact: icons only on screen; icon + text when printed (paper can't be clicked).
@@ -20,9 +21,12 @@ export default function Resume() {
       </div>
 
       <main className={styles.sheet}>
-        <Link href="/" className={`${styles.back} ${styles.noPrint}`}>
-          ← back
-        </Link>
+        <nav className={`${styles.topNav} ${styles.noPrint}`}>
+          <Link href="/" className={styles.back}>
+            ← back
+          </Link>
+          <PrintButton className={styles.back} />
+        </nav>
 
         <header className={styles.header}>
           <h1 className={`${styles.display} ${styles.name}`}>Joey Qizhi Liu</h1>

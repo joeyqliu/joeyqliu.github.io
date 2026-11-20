@@ -29,6 +29,20 @@
   color: var(--muted);
 }
 .back:hover { color: var(--ink); }
+button.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+.topNav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
 
 .header {
   display: flex;
