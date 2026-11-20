@@ -47,8 +47,7 @@ export const jobs: Job[] = [
       "Cut average build time for Handshake's main application by 13%, from 26 to 22.6 minutes, and cut time for the slowest builds by 15%, by tuning our Kubernetes cluster for builds, running more build steps in parallel, and caching container images. Based on more than 2,000 production builds, this saves engineers about 85 hours of waiting each month.",
       "Led the upgrade of about 60 Redis databases across 5 environments from unsupported versions to Redis 7.2, finishing in under 6 weeks with no downtime. Resized oversized instances along the way to save $260K a year, and updated our shared Terraform module so new instances start with the right settings, including backups.",
       "Coordinated a security update across 9 services owned by different teams and finished it in 2.5 weeks. Made more than half of the changes myself and worked with each team on its rollout. Then changed our shared Helm chart so new services get the safer settings automatically.",
-      "Set up the infrastructure for several new teams and product launches, including Handshake's internal AI model gateway. The gateway is one service that lets teams use models from Google, Anthropic, and other providers. I also moved research ML models into production.",
-      "Turned that work into shared tools that other teams now reuse. One is a Terraform module that lets GitHub deploy to GCP without stored keys. Another is a standard way to load ML models from cloud storage. I also built a serverless pipeline that replaced our old workflow system.",
+      "Set up the infrastructure for several new teams and product launches, including Handshake's internal AI model gateway, which lets teams use models from Google, Anthropic, and other providers through one service. Turned that work into shared tools other teams now reuse, like a Terraform module that lets GitHub deploy to GCP without stored keys and a standard way to load ML models from cloud storage.",
     ],
   },
   {
@@ -65,11 +64,9 @@ export const jobs: Job[] = [
       "served as the embedded platform liaison to multiple ~15-person product teams during their design and build phases, maintained 10+ multi-region clusters, and rotated on-call for all critical platform services. my first high-leverage job — and the one that taught me what platform engineering is actually for.",
     ],
     resume: [
-      "Owned the in-house Terraform module library (50+ modules) and infrastructure-as-code stack used by 500+ engineers.",
-      "Migrated script-based Helm deployments to a versioned Terraform module adopted across 20+ Kubernetes clusters.",
-      "Reimplemented a system-critical DNS component and rolled it through 8+ EKS clusters with zero customer impact; automated the move from cluster-autoscaler to Karpenter.",
-      "Built drift-detection tooling across 8+ AWS accounts and automated publication of 200+ technical documents.",
-      "Contributed upstream fixes to Open Policy Agent and EKS-Blueprints; served as platform liaison to multiple ~15-person product teams.",
+      "Owned the in-house Terraform module library of 50+ modules, used by 500+ engineers to manage their infrastructure.",
+      "Moved Helm deployments from scripts to a versioned Terraform module used across 20+ Kubernetes clusters, and rebuilt a critical DNS component across 8+ EKS clusters with no customer impact.",
+      "Built tools to find unmanaged and forgotten infrastructure across 8+ AWS accounts, and contributed fixes to open source projects like Open Policy Agent and EKS Blueprints.",
     ],
   },
   {
