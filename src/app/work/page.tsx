@@ -17,20 +17,12 @@ export default function Work() {
         </Link>
 
         <section className="max-w-[760px] w-full flex flex-col gap-10 pt-4 sm:pt-8">
-          <div className="flex items-baseline gap-4">
-            <h1
-              className="text-3xl sm:text-[40px] text-[#111111] dark:text-[#f2f2f2] font-[family-name:var(--font-geist)] tracking-tight"
-              style={{ fontWeight: 500, lineHeight: 1.05 }}
-            >
-              work
-            </h1>
-            <Link
-              href="/resume"
-              className="text-[13px] text-[#555555] dark:text-[#999999] hover:text-[#111111] dark:hover:text-[#f2f2f2] font-[family-name:var(--font-ibm-plex-mono)] transition-colors"
-            >
-              one-page version →
-            </Link>
-          </div>
+          <h1
+            className="text-3xl sm:text-[40px] text-[#111111] dark:text-[#f2f2f2] font-[family-name:var(--font-geist)] tracking-tight"
+            style={{ fontWeight: 500, lineHeight: 1.05 }}
+          >
+            work
+          </h1>
 
           {/* Each entry is a collapsible <details> — edit src/data/experience.ts; toggle `defaultOpen` to change initial state */}
           <div className="flex flex-col">
