@@ -40,5 +40,5 @@ test("real data: resume shows handshake + rivian, work shows all five", () => {
 });
 
 test("no phone number anywhere in data", () => {
-  assert.doesNotMatch(JSON.stringify({ jobs, education }), /\d{3}\)?[ -]?\d{3}-\d{4}/);
+  assert.doesNotMatch(JSON.stringify({ jobs, education }), /\(?\d{3}\)?[ .-]?\d{3}[ .-]?\d{4}/);
 });
