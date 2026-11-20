@@ -28,7 +28,7 @@ export default function Work() {
               href="/resume"
               className="text-[13px] text-[#555555] dark:text-[#999999] hover:text-[#111111] dark:hover:text-[#f2f2f2] font-[family-name:var(--font-ibm-plex-mono)] transition-colors"
             >
-              resume →
+              one-page version →
             </Link>
           </div>
 

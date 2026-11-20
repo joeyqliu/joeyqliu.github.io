@@ -92,6 +92,12 @@ export default function Home() {
               work
             </Link>
             <Link
+              href="/resume"
+              className="text-[13px] text-[#111111] dark:text-[#f2f2f2] hover:text-[#555555] dark:hover:text-[#999999] font-[family-name:var(--font-ibm-plex-mono)] w-fit transition-colors"
+            >
+              resume
+            </Link>
+            <Link
               href="/blog"
               className="text-[13px] text-[#111111] dark:text-[#f2f2f2] hover:text-[#555555] dark:hover:text-[#999999] font-[family-name:var(--font-ibm-plex-mono)] w-fit transition-colors"
             >
