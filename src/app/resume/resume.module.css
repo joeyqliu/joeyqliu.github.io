@@ -50,14 +50,21 @@
 
 .contact {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  text-align: right;
+  gap: 0.9rem;
   font-size: 0.8rem;
+  padding-bottom: 0.4rem;
 }
-.contact h2 { font-size: 1.15rem; }
-.contact a { color: var(--ink); text-decoration: none; }
-.contact a:hover { text-decoration: underline; }
+.contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 150ms;
+}
+.contact a:hover { color: var(--ink); }
+.icon { width: 1.6rem; height: 1.6rem; flex-shrink: 0; }
+.printOnly { display: none; }
 
 .rule {
   border: 0;
@@ -100,5 +107,9 @@
   .sheet { max-width: none; padding: 0; }
   .header { margin-top: 0; }
   .noPrint { display: none !important; }
+  .printOnly { display: inline; }
+  .contact { flex-direction: column; align-items: flex-end; gap: 0.2rem; padding-bottom: 0; }
+  .contact a { color: var(--ink); flex-direction: row-reverse; }
+  .icon { width: 0.95rem; height: 0.95rem; }
   .job { break-inside: avoid; }
 }

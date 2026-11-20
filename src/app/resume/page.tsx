@@ -1,13 +1,15 @@
 import Link from "next/link";
+import { EnvelopeIcon, GithubLogoIcon, LinkedinLogoIcon } from "@phosphor-icons/react/ssr";
 import ThemeToggle from "@/components/ThemeToggle";
 import { education, resumeJobs } from "@/data/experience";
 import styles from "./resume.module.css";
 
-// Content lives in src/data/experience.ts — edit there, not here.
+// Jobs + education live in src/data/experience.ts.
+// Contact: icons only on screen; icon + text when printed (paper can't be clicked).
 const contact = [
-  { label: "joeyqliu@gmail.com", href: "mailto:joeyqliu@gmail.com" },
-  { label: "github.com/joeyqliu", href: "https://github.com/joeyqliu" },
-  { label: "linkedin.com/in/joeyqliu", href: "https://linkedin.com/in/joeyqliu" },
+  { name: "Email", label: "joeyqliu@gmail.com", href: "mailto:joeyqliu@gmail.com", Icon: EnvelopeIcon },
+  { name: "GitHub", label: "github.com/joeyqliu", href: "https://github.com/joeyqliu", Icon: GithubLogoIcon },
+  { name: "LinkedIn", label: "linkedin.com/in/joeyqliu", href: "https://linkedin.com/in/joeyqliu", Icon: LinkedinLogoIcon },
 ];
 
 export default function Resume() {
@@ -25,10 +27,10 @@ export default function Resume() {
         <header className={styles.header}>
           <h1 className={`${styles.display} ${styles.name}`}>Joey Qizhi Liu</h1>
           <div className={styles.contact}>
-            <h2 className={styles.display}>Contact Info</h2>
-            {contact.map(({ label, href }) => (
-              <a key={href} href={href}>
-                {label}
+            {contact.map(({ name, label, href, Icon }) => (
+              <a key={href} href={href} aria-label={name} title={label}>
+                <Icon weight="duotone" aria-hidden="true" className={styles.icon} />
+                <span className={styles.printOnly}>{label}</span>
               </a>
             ))}
           </div>
