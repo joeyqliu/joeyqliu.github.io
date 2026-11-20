@@ -18,7 +18,7 @@ export default function Resume() {
       </div>
 
       <main className={styles.sheet}>
-        <Link href="/work" className={`${styles.back} ${styles.noPrint}`}>
+        <Link href="/" className={`${styles.back} ${styles.noPrint}`}>
           ← back
         </Link>
 
