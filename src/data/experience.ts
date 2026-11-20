@@ -42,10 +42,13 @@ export const jobs: Job[] = [
       "as part of the same ci cost initiative, shipped a one-pr opt-in mechanism that turned on bring-your-own-bucket artifact uploads for every pipeline org-wide — a platform-level switch flipped once and adopted across the entire build fleet, completing the ~$180K/year networking savings program.",
     ],
     resume: [
-      "Led the upgrade and right-sizing of the entire Memorystore Redis fleet (~65 instances, 5 environments) from Redis 4.0/6.x to 7.2, saving $280K/year and cutting memory 61% (982 GB → 381 GB) with zero production incidents.",
-      "Project lead for migrating CI build infrastructure from AWS EC2 to ephemeral Kubernetes agents on GCP/GKE, with full infrastructure as code and modern secrets management, saving ~$240K/year.",
-      "Diagnosed a year-long silent failure in the NFS-based git cache for CI builds and shipped a minimal fix capturing ~70–80% of available networking savings; retired ~11 TiB of orphaned storage (~$39K/year).",
-      "Shipped an org-wide opt-in for bring-your-own-bucket artifact uploads across every pipeline, completing a ~$180K/year CI networking savings program.",
+      "Own Handshake's CI platform, the system that builds and tests every code change. Led a multi-quarter move of all CI builds from AWS EC2 to Kubernetes on GCP, where each build runs on its own temporary machine. Cut compute costs by 35%, from $55K to $36K a month, and have run and improved the platform since.",
+      "Found two problems in our CI network and storage setup that had been adding to our cloud bill for over a year. Fixed them with a small, targeted change instead of the large rebuild we had planned, which got most of the savings for a fraction of the work. The fix saves $254K a year in network and storage costs.",
+      "Cut average build time for Handshake's main application by 13%, from 26 to 22.6 minutes, and cut time for the slowest builds by 15%, by tuning our Kubernetes cluster for builds, running more build steps in parallel, and caching container images. Based on more than 2,000 production builds, this saves engineers about 85 hours of waiting each month.",
+      "Led the upgrade of about 60 Redis databases across 5 environments from unsupported versions to Redis 7.2, finishing in under 6 weeks with no downtime. Resized oversized instances along the way to save $260K a year, and updated our shared Terraform module so new instances start with the right settings, including backups.",
+      "Coordinated a security update across 9 services owned by different teams and finished it in 2.5 weeks. Made more than half of the changes myself and worked with each team on its rollout. Then changed our shared Helm chart so new services get the safer settings automatically.",
+      "Set up the infrastructure for several new teams and product launches, including Handshake's internal AI model gateway. The gateway is one service that lets teams use models from Google, Anthropic, and other providers. I also moved research ML models into production.",
+      "Turned that work into shared tools that other teams now reuse. One is a Terraform module that lets GitHub deploy to GCP without stored keys. Another is a standard way to load ML models from cloud storage. I also built a serverless pipeline that replaced our old workflow system.",
     ],
   },
   {
