@@ -50,3 +50,17 @@ summary {
     animation: none;
   }
 }
+
+/* Print: always black on white, Letter size (used by /resume) */
+@page {
+  size: letter;
+  margin: 0.5in;
+}
+
+@media print {
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}

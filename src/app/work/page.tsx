@@ -9,12 +9,20 @@ export default function Work() {
       <ThemeToggle />
 
       <div className="min-h-screen flex flex-col px-6 sm:px-14 pt-16 sm:pt-[42px] pb-12 sm:pb-12 gap-6">
+        <div className="flex gap-6">
         <Link
           href="/"
           className="text-[13px] text-[#555555] dark:text-[#999999] hover:text-[#111111] dark:hover:text-[#f2f2f2] font-[family-name:var(--font-ibm-plex-mono)] w-fit transition-colors"
         >
           ← back
         </Link>
+        <Link
+          href="/resume"
+          className="text-[13px] text-[#555555] dark:text-[#999999] hover:text-[#111111] dark:hover:text-[#f2f2f2] font-[family-name:var(--font-ibm-plex-mono)] w-fit transition-colors"
+        >
+          resume →
+        </Link>
+        </div>
 
         <section className="max-w-[760px] w-full flex flex-col gap-10 pt-4 sm:pt-8">
           <h1
